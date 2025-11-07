@@ -8,14 +8,92 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 
     <style>
-        .item-note-display {
-            font-size: 13px;
-            font-weight: 500;
+        /* CSS UMUM UNTUK SEMUA MODAL */
+        .modal-overlay {
+            display: none; position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+            left: 50%; transform: translateX(-50%);
+            max-width: 375px; 
+        }
+        .modal-content {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            background: #f0f2f5;
+            border-radius: 20px 20px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+            max-height: 80%; /* Batasi tinggi modal */
+            overflow-y: auto;
+        }
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+        .modal-header {
+            padding: 16px 20px;
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+        .modal-header h3 {
+            font-size: 16px; font-weight: 700;
+            text-align: center; margin: 0;
+        }
+        .modal-close-button {
+            position: absolute; top: 12px; left: 16px;
+            font-size: 24px; color: #888; cursor: pointer; text-decoration: none;
+        }
+        .modal-body { padding: 0px; }
+
+
+        /* CSS Khusus Modal Catatan */
+        .modal-note-item {
+            background: #fff;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .modal-note-item h5 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .modal-note-item .form-input {
+            height: 60px;
+        }
+        
+        /* CSS Khusus Modal Voucher */
+        .modal-voucher-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .modal-voucher-item input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            accent-color: var(--primary-color);
+        }
+        .modal-voucher-item .info { flex-grow: 1; }
+        .modal-voucher-item .info h5 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .modal-voucher-item .info p {
+            font-size: 12px;
             color: var(--light-text);
-            background-color: var(--bg-light);
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-top: 8px;
+            margin: 0;
+        }
+        .modal-voucher-item.disabled .info h5,
+        .modal-voucher-item.disabled .info p {
+            color: #ccc;
+            text-decoration: line-through;
         }
     </style>
 </head>
@@ -35,8 +113,6 @@
                 <div class="info">
                     <h4>Nasi Rames Ayam</h4>
                     <p>Rp 12.000</p>
-                    <a href="#" class="item-notes"><i class="fas fa-pen"></i> Ubah Catatan</a>
-                    <p class="item-note-display">Catatan: Tidak pakai sayur.</p>
                 </div>
                 <div class="cart-stepper">
                     <button>-</button>
@@ -51,8 +127,6 @@
                 <div class="info">
                     <h4>Es Teh Manis</h4>
                     <p>Rp 3.000</p>
-                    <a href="#" class="item-notes"><i class="fas fa-pen"></i> Ubah Catatan</a>
-                    <p class="item-note-display">Catatan: Es sedikit.</p>
                 </div>
                 <div class="cart-stepper">
                     <button>-</button>
@@ -62,20 +136,28 @@
                 <a class="item-delete"><i class="fas fa-trash-alt"></i></a>
             </div>
 
-            <a href="#" class="interactive-row" style="margin-top: 20px;">
+            <a href="javascript:void(0)" class="interactive-row" style="margin-top: 20px;" onclick="openGlobalNoteModal()">
+                <div class="info-group">
+                    <i class="fas fa-sticky-note" style="color: var(--primary-color);"></i>
+                    <span id="note-summary-link">Tambah/Edit Catatan Pesanan</span>
+                </div>
+                <span class="action" id="note-summary-status">&gt;</span>
+            </a>
+
+            <a href="javascript:void(0)" class="interactive-row" onclick="openVoucherModal()">
                 <div class="info-group">
                     <i class="fas fa-ticket-alt"></i>
                     <span>Gunakan Voucher</span>
                 </div>
-                <span class="action">&gt;</span>
+                <span class="action" id="voucher-summary-status">&gt;</span>
             </a>
             
-            <a href="#" class="interactive-row">
+            <a href="javascript:void(0)" class="interactive-row" onclick="openPaymentModal()">
                 <div class="info-group">
                     <i class="fas fa-wallet"></i>
                     <span>Metode Pembayaran</span>
                 </div>
-                <span class="action">E-Wallet &gt;</span>
+                <span class="action" id="payment-summary-status">QRIS &gt;</span>
             </a>
 
             <div class="summary-block" style="margin-top: 20px;">
@@ -88,9 +170,13 @@
                     <span>Biaya Layanan</span>
                     <span>Rp 1.000</span>
                 </div>
+                <div class="summary-row" id="diskon-row" style="display: none; color: var(--success);">
+                    <span>Diskon Voucher</span>
+                    <span id="diskon-amount">- Rp 0</span>
+                </div>
                 <div class="summary-total">
                     <span>Total</span>
-                    <span>Rp 16.000</span>
+                    <span id="total-amount">Rp 16.000</span>
                 </div>
             </div>
         </div>
@@ -98,11 +184,220 @@
         <div class="sticky-button-container">
             <div class="total-price">
                 <p>Total Pembayaran</p>
-                <h3>Rp 16.000</h3>
+                <h3 id="total-payment-bottom">Rp 16.000</h3>
             </div>
             <a href="pelanggan_tab_pesanan.html" class="button">Konfirmasi & Bayar</a>
         </div>
     </div>
 
+    <div class="modal-overlay" id="globalNoteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tambah Catatan</h3>
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closeGlobalNoteModal()">&times;</a>
+            </div>
+            <div class="modal-body">
+                <div class="modal-note-item">
+                    <h5>1x Nasi Rames Ayam</h5>
+                    <textarea id="note-text-item1" class="form-input" placeholder="Tulis catatan..."></textarea>
+                </div>
+                <div class="modal-note-item">
+                    <h5>1x Es Teh Manis</h5>
+                    <textarea id="note-text-item2" class="form-input" placeholder="Tulis catatan..."></textarea>
+                </div>
+            </div>
+            <div class="sticky-button-container">
+                <a href="javascript:void(0)" class="button" onclick="saveGlobalNotes()">Simpan Catatan</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="voucherModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Gunakan Voucher</h3>
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closeVoucherModal()">&times;</a>
+            </div>
+            <div class="modal-body">
+                <label for="voucher1" class="modal-voucher-item">
+                    <input type="radio" id="voucher1" name="voucher" value="2000">
+                    <div class="info">
+                        <h5>Diskon Rp 2.000</h5>
+                        <p>Min. belanja Rp 15.000</p>
+                    </div>
+                </label>
+                <label for="voucher2" class="modal-voucher-item disabled">
+                    <input type="radio" id="voucher2" name="voucher" value="5000" disabled>
+                    <div class="info">
+                        <h5>Diskon Rp 5.000</h5>
+                        <p>Min. belanja Rp 30.000 (Belum tercapai)</p>
+                    </div>
+                </label>
+            </div>
+            <div class="sticky-button-container">
+                <a href="javascript:void(0)" class="button" onclick="saveVoucher()">Pakai Voucher</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Metode Pembayaran</h3>
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closePaymentModal()">&times;</a>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <div class="radio-list-item">
+                    <input type="radio" id="payment_qris" name="payment" value="QRIS" checked>
+                    <label for="payment_qris"><i class="fas fa-qrcode" style="color: #000; margin-right: 8px;"></i> QRIS (Rekomendasi)</label>
+                </div>
+                <div class="radio-list-item">
+                    <input type="radio" id="payment_ewallet" name="payment" value="E-Wallet">
+                    <label for="payment_ewallet"><i class="fas fa-wallet" style="color: var(--info); margin-right: 8px;"></i> E-Wallet (OVO, Gopay, dll)</label>
+                </div>
+                <div class="radio-list-item">
+                    <input type="radio" id="payment_va" name="payment" value="Virtual Account">
+                    <label for="payment_va"><i class="fas fa-university" style="color: #666; margin-right: 8px;"></i> Virtual Account (Rekening)</label>
+                </div>
+                <div class="radio-list-item">
+                    <input type="radio" id="payment_tunai" name="payment" value="Tunai">
+                    <label for="payment_tunai"><i class="fas fa-money-bill-wave" style="color: var(--success); margin-right: 8px;"></i> Tunai di Kantin</label>
+                </div>
+            </div>
+            <div class="sticky-button-container">
+                <a href="javascript:void(0)" class="button" onclick="savePayment()">Pilih Metode</a>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Variabel global untuk modal
+        const globalModal = document.getElementById('globalNoteModal');
+        const voucherModal = document.getElementById('voucherModal');
+        const paymentModal = document.getElementById('paymentModal');
+        
+        // Database simulasi
+        let cartNotes = {
+            'item1': 'Tidak pakai sayur.',
+            'item2': 'Es sedikit.'
+        };
+        let selectedVoucher = null;
+        let selectedPayment = 'QRIS'; 
+        const subtotal = 15000;
+        const biayaLayanan = 1000;
+
+        // --- Fungsi Modal Catatan ---
+        function openGlobalNoteModal() {
+            document.getElementById('note-text-item1').value = cartNotes['item1'] || '';
+            document.getElementById('note-text-item2').value = cartNotes['item2'] || '';
+            globalModal.style.display = 'block';
+            setTimeout(() => globalModal.classList.add('show'), 10);
+        }
+        function closeGlobalNoteModal() {
+            globalModal.classList.remove('show');
+            setTimeout(() => globalModal.style.display = 'none', 300);
+        }
+        function saveGlobalNotes() {
+            cartNotes['item1'] = document.getElementById('note-text-item1').value;
+            cartNotes['item2'] = document.getElementById('note-text-item2').value;
+            let noteCount = 0;
+            if (cartNotes['item1']) noteCount++;
+            if (cartNotes['item2']) noteCount++;
+            const noteLink = document.getElementById('note-summary-link');
+            const noteStatus = document.getElementById('note-summary-status');
+            if (noteCount > 0) {
+                noteLink.innerText = 'Lihat/Edit Catatan';
+                noteStatus.innerHTML = `<i class="fas fa-check-circle" style="color: var(--success);"></i> (${noteCount} item)`;
+            } else {
+                noteLink.innerText = 'Tambah Catatan Pesanan';
+                noteStatus.innerHTML = '>';
+            }
+            closeGlobalNoteModal();
+        }
+
+        // --- Fungsi Modal Voucher ---
+        function openVoucherModal() {
+            if (selectedVoucher) {
+                const radio = document.querySelector(`input[name="voucher"][value="${selectedVoucher}"]`);
+                if(radio) radio.checked = true;
+            } else {
+                const radios = document.querySelectorAll('input[name="voucher"]');
+                radios.forEach(r => r.checked = false);
+            }
+            voucherModal.style.display = 'block';
+            setTimeout(() => voucherModal.classList.add('show'), 10);
+        }
+        function closeVoucherModal() {
+            voucherModal.classList.remove('show');
+            setTimeout(() => voucherModal.style.display = 'none', 300);
+        }
+        function saveVoucher() {
+            const voucherInput = document.querySelector('input[name="voucher"]:checked');
+            const voucherStatus = document.getElementById('voucher-summary-status');
+            if (voucherInput) {
+                selectedVoucher = voucherInput.value; 
+                voucherStatus.innerText = `Diskon Rp ${selectedVoucher.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+                voucherStatus.style.color = "var(--success)";
+                voucherStatus.style.fontWeight = "700";
+            } else {
+                selectedVoucher = null;
+                voucherStatus.innerText = 'Gunakan Voucher';
+                voucherStatus.style.color = "var(--light-text)";
+                voucherStatus.style.fontWeight = "600";
+            }
+            updateTotal();
+            closeVoucherModal();
+        }
+
+        // --- Fungsi Modal Pembayaran ---
+        function openPaymentModal() {
+            let paymentId = `payment_${selectedPayment.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`;
+            if(document.getElementById(paymentId)) {
+                document.getElementById(paymentId).checked = true;
+            }
+            paymentModal.style.display = 'block';
+            setTimeout(() => paymentModal.classList.add('show'), 10);
+        }
+        function closePaymentModal() {
+            paymentModal.classList.remove('show');
+            setTimeout(() => paymentModal.style.display = 'none', 300);
+        }
+        function savePayment() {
+            selectedPayment = document.querySelector('input[name="payment"]:checked').value;
+            const paymentStatus = document.getElementById('payment-summary-status');
+            paymentStatus.innerText = `${selectedPayment} >`;
+            paymentStatus.style.color = "var(--dark-text)";
+            paymentStatus.style.fontWeight = "700";
+            closePaymentModal();
+        }
+        
+        // --- Fungsi Update Total ---
+        function updateTotal() {
+            let diskon = selectedVoucher ? parseInt(selectedVoucher) : 0;
+            let total = subtotal + biayaLayanan - diskon;
+            const diskonRow = document.getElementById('diskon-row');
+            if (diskon > 0) {
+                document.getElementById('diskon-amount').innerText = `- Rp ${diskon.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+                diskonRow.style.display = 'flex';
+            } else {
+                diskonRow.style.display = 'none';
+            }
+            let formattedTotal = `Rp ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+            document.getElementById('total-amount').innerText = formattedTotal;
+            document.getElementById('total-payment-bottom').innerText = formattedTotal;
+        }
+
+        // Inisialisasi tampilan catatan & total saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            saveGlobalNotes(); // update tampilan catatan
+            updateTotal();     // update tampilan harga (jika ada voucher terpilih)
+            
+            // Inisialisasi tampilan pembayaran
+            document.getElementById('payment-summary-status').innerText = `${selectedPayment} >`;
+            document.getElementById('payment-summary-status').style.color = "var(--dark-text)";
+            document.getElementById('payment-summary-status').style.fontWeight = "700";
+        });
+    </script>
 </body>
 </html>
