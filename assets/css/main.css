@@ -18,7 +18,7 @@ body {
 h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
 
 :root {
-    --primary-color: #FF4500;
+    --primary-color: #28a745; /* WARNA HIJAU BARU ANDA */
     --dark-text: #1A1A1A;
     --light-text: #555;
     --border-color: #EEEEEE;
@@ -26,7 +26,7 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
     --success: #28a745;
     --danger: #dc3545;
     --warning: #ffc107;
-    --info: #007bff; /* (BARU) Warna biru untuk status "Dimasak" */
+    --info: #007bff;
 }
 
 /* =================================== */
@@ -170,18 +170,17 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     border: 1px solid var(--border-color);
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     overflow: hidden;
 }
 .order-card-header {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border-color);
+    padding: 16px 16px 12px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 .order-card-header h4 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
 }
 .order-card-header .status-badge {
@@ -200,8 +199,31 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
 .order-card-header .status-success {
     background: var(--success);
 }
+.order-card-meta {
+    padding: 0px 16px 12px 16px; 
+    border-bottom: 1px dashed var(--border-color);
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--light-text);
+}
+.order-card-meta .meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.order-card-meta .order-card-timer {
+    color: var(--dark-text); 
+    font-weight: 700;
+}
+.order-card-meta .order-card-timer i {
+    margin-right: 4px; 
+}
 .order-card-body {
-    padding: 16px;
+    padding: 0px 16px 12px 16px;
     font-size: 14px;
     line-height: 1.5;
 }
@@ -210,17 +232,70 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
     color: var(--light-text);
 }
 .order-card-body .items {
-    font-weight: 500;
+    font-weight: 600;
     color: var(--dark-text);
     margin-bottom: 4px;
+    font-size: 15px;
 }
+.order-card-body .total-amount {
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-top: 8px;
+    font-size: 16px;
+}
+.order-card-notes {
+    background: #fff8e1;
+    color: #663c00;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 16px 16px 16px;
+    border-radius: 8px;
+}
+.order-card-notes i {
+    color: #cc9900;
+}
+
+/* --- (ROMBAK TOTAL) FOOTER KARTU RIWAYAT --- */
 .order-card-footer {
     padding: 12px 16px;
     background: #fdfdfd;
     border-top: 1px solid var(--border-color);
     display: flex;
     gap: 10px;
+    /* (DIUBAH) Tombol tidak lagi memakan 60% width */
+    justify-content: space-between;
+    align-items: center;
 }
+/* (BARU) Atur tombol agar auto-width */
+.order-card-footer .button-group {
+    display: flex;
+    gap: 10px;
+}
+.order-card-footer .button,
+.order-card-footer .button.secondary {
+    width: auto; /* (DIUBAH) Ini kuncinya! */
+    padding: 10px 16px; /* (DIUBAH) Padding lebih kecil */
+    font-size: 14px; /* (DIUBAH) Font lebih kecil */
+}
+/* (BARU) Atur Tampilan Total Harga */
+.order-card-footer .total-price-history {
+    text-align: left;
+}
+.order-card-footer .total-price-history p {
+    font-size: 12px;
+    color: var(--light-text);
+    margin: 0;
+}
+.order-card-footer .total-price-history h4 {
+    font-size: 16px;
+    font-weight: 700;
+}
+/* --- AKHIR ROMBAK FOOTER --- */
+
 .store-status {
     display: flex;
     justify-content: space-between;
@@ -372,57 +447,6 @@ input:checked + .slider:before {
     outline: none;
     box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.1);
 }
-.profile-header {
-    background-color: #ffffff;
-    padding: 24px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-}
-.avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #e0e0e0;
-    margin-bottom: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 48px;
-    color: #888;
-}
-.user-name { font-size: 22px; font-weight: 700; color: var(--dark-text); margin: 0; }
-.user-email { font-size: 16px; font-weight: 500; color: var(--light-text); margin: 4px 0 0 0; }
-.profile-list { list-style: none; padding: 0; margin: 0; }
-.profile-list-item {
-    background: #fff;
-    padding: 18px 20px;
-    border-bottom: 1px solid var(--border-color);
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.profile-list-item:hover { background: #f9f9f9; }
-.logout-button {
-    display: block;
-    width: 100%;
-    padding: 18px 20px;
-    font-size: 16px;
-    font-weight: 600; 
-    color: var(--danger);
-    text-align: center;
-    text-decoration: none;
-    background-color: #fff;
-    border: none;
-    cursor: pointer;
-    box-sizing: border-box;
-}
-.logout-button:hover { background-color: #fff8f8; }
 .tab-container {
     display: flex;
     background-color: #fff;
@@ -573,16 +597,13 @@ input:checked + .slider:before {
     font-weight: 600;
     cursor: pointer;
 }
-
-/* --- (ROMBAK TOTAL) KERANJANG PELANGGAN --- */
 .cart-item-card {
     background: #fff;
-    /* border: 1px solid var(--border-color); */ /* Hapus border */
-    border-bottom: 1px solid var(--border-color); /* Ganti jadi pemisah bawah */
-    border-radius: 0; /* Hapus radius */
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
     margin-bottom: 0;
     display: flex;
-    padding: 16px 0; /* Atur padding */
+    padding: 16px 0;
     gap: 12px;
 }
 .cart-item-card:last-of-type {
@@ -620,7 +641,7 @@ input:checked + .slider:before {
     gap: 10px;
 }
 .cart-stepper button {
-    width: 30px; /* Sedikit lebih besar */
+    width: 30px;
     height: 30px;
     border: 1.5px solid var(--primary-color);
     background: #fff;
@@ -629,16 +650,14 @@ input:checked + .slider:before {
     font-size: 20px;
     font-weight: 700;
     cursor: pointer;
-    line-height: 1; /* Fix alignment */
+    line-height: 1;
 }
 .cart-stepper span {
     font-size: 16px;
     font-weight: 700;
-    min-width: 12px; /* Jaga jarak */
+    min-width: 12px;
     text-align: center;
 }
-
-/* (BARU) Baris Interaktif (Voucher, Payment) */
 .interactive-row {
     background: #fff;
     padding: 16px 0;
@@ -669,8 +688,6 @@ input:checked + .slider:before {
     font-weight: 600;
     color: var(--light-text);
 }
-
-/* (BARU) Blok Ringkasan Pembayaran (Fix "Numpuk") */
 .summary-block {
     background: #fff;
     padding: 16px 0;
@@ -696,8 +713,6 @@ input:checked + .slider:before {
     padding-top: 12px;
     border-top: 2px solid #333;
 }
-
-/* (DIUBAH) Sticky Button Footer */
 .sticky-button-container {
     padding: 12px 20px;
     border-top: 1px solid var(--border-color);
@@ -723,10 +738,8 @@ input:checked + .slider:before {
     margin: 0;
 }
 .sticky-button-container .button {
-    width: 60%; /* Tidak full width */
+    width: 60%;
 }
-
-/* --- (ROMBAK TOTAL) Tracker Status Pesanan Pelanggan --- */
 .unified-order-card {
     background: #fff;
     border-radius: 16px;
@@ -940,4 +953,221 @@ input:checked + .slider:before {
     border: 1.5px solid var(--primary-color);
     padding: 8px 12px;
     border-radius: 8px;
+}
+.history-log-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    margin-bottom: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.history-log-card .icon-log {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-light);
+    color: var(--success);
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+.history-log-card .log-info {
+    flex-grow: 1;
+}
+.history-log-card .log-info h5 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dark-text);
+}
+.history-log-card .log-info p {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--light-text);
+    margin: 2px 0 0 0;
+}
+.history-log-card .log-amount {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dark-text);
+}
+.profile-header {
+    background-color: #ffffff;
+    padding: 24px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: -20px -20px 20px -20px;
+    border-bottom: 1px solid var(--border-color);
+}
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    color: #888;
+    flex-shrink: 0;
+}
+.user-info {
+    flex-grow: 1;
+}
+.user-name { font-size: 20px; font-weight: 700; color: var(--dark-text); margin: 0; }
+.user-email { font-size: 15px; font-weight: 500; color: var(--light-text); margin: 4px 0 0 0; }
+.profile-edit-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+.profile-feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.feature-item {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark-text);
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+.feature-item i {
+    font-size: 24px;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    display: block;
+}
+.profile-list-group {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.profile-list-item {
+    background: #fff;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: var(--dark-text);
+}
+.profile-list-item:last-child {
+    border-bottom: none;
+}
+.profile-list-item:hover { background: #f9f9f9; }
+.profile-list-item .icon {
+    width: 20px;
+    margin-right: 12px;
+    color: var(--light-text);
+    font-size: 18px;
+    text-align: center;
+}
+.profile-list-item span {
+    flex-grow: 1;
+}
+.profile-list-item .chevron {
+    color: #ccc;
+    font-size: 14px;
+}
+.logout-button-container {
+    padding-top: 10px;
+}
+.logout-button {
+    display: block;
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 700; 
+    color: var(--danger);
+    text-align: center;
+    text-decoration: none;
+    background-color: #fff8f8;
+    border: 1.5px solid #ffe0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color 0.2s;
+}
+.logout-button:hover { background-color: #fbebeb; }
+
+/* --- (BARU) KOMPONEN HALAMAN RATING --- */
+.rating-item-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    gap: 12px;
+}
+.rating-item-card .img-placeholder {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    background: #eee;
+    flex-shrink: 0;
+}
+.rating-item-card .info {
+    flex-grow: 1;
+}
+.rating-item-card .info h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.rating-item-card .info p { font-size: 14px; font-weight: 500; color: var(--light-text); margin: 0; }
+
+.star-rating {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 24px 0;
+}
+.star-rating i {
+    font-size: 36px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+/* Style untuk bintang yang 'hover' atau 'selected' */
+.star-rating i:hover,
+.star-rating i.selected {
+    color: var(--warning);
+}
+
+.rating-comment-box {
+    width: 100%;
+    height: 120px;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: 1.5px solid #ddd;
+    box-sizing: border-box; 
+    font-family: 'Montserrat', sans-serif;
+    resize: none;
+}
+.rating-comment-box:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.1); /* Diubah ke hijau */
 }

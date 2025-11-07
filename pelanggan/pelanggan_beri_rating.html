@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beri Rating - KantinKu</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</head>
+<body>
+
+    <div class="mobile-screen">
+        <div class="header">
+            <a href="pelanggan_tab_pesanan.html" class="back-button">&lt;</a>
+            Beri Ulasan
+        </div>
+        
+        <div class="content" style="background-color: #fff;">
+            
+            <div class="rating-item-card">
+                <div class="img-placeholder"></div>
+                <div class="info">
+                    <h4>Kantin Dzaky</h4>
+                    <p>1 items: Mie Ayam Bakso</p>
+                </div>
+            </div>
+
+            <div class="section-title" style="text-align: center; display: block; margin-top: 24px;">
+                Bagaimana Pesananmu?
+            </div>
+            
+            <div class="star-rating">
+                <i class="fas fa-star" onclick="setRating(1, this)"></i>
+                <i class="fas fa-star" onclick="setRating(2, this)"></i>
+                <i class="fas fa-star" onclick="setRating(3, this)"></i>
+                <i class="fas fa-star" onclick="setRating(4, this)"></i>
+                <i class="fas fa-star" onclick="setRating(5, this)"></i>
+            </div>
+
+            <div class="form-group" style="margin-top: 24px;">
+                <label for="comment">Tulis Ulasan (Opsional)</label>
+                <textarea id="comment" class="rating-comment-box" placeholder="Ceritakan pengalamanmu..."></textarea>
+            </div>
+            
+        </div>
+        
+        <div class="sticky-button-container">
+            <a href="pelanggan_tab_pesanan.html" class="button">Kirim Ulasan</a>
+        </div>
+    </div>
+
+    <script>
+        const stars = document.querySelectorAll('.star-rating i');
+        let currentRating = 0;
+
+        function setRating(rating) {
+            currentRating = rating;
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                }
+            });
+        }
+        
+        // Bonus: Efek hover
+        stars.forEach((star, index) => {
+            star.addEventListener('mouseover', () => {
+                stars.forEach((s, i) => {
+                    if (i <= index) {
+                        s.classList.add('selected');
+                    } else {
+                        s.classList.remove('selected');
+                    }
+                });
+            });
+            star.addEventListener('mouseout', () => {
+                setRating(currentRating); // Kembali ke rating yg sudah diklik
+            });
+        });
+    </script>
+
+</body>
+</html>

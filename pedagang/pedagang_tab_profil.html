@@ -18,35 +18,55 @@
             
             <div class="profile-header">
                 <div class="avatar">🏪</div>
-                <h3 class="user-name">Kantin Bu Martin</h3>
-                <p class="user-email">martin@kantin.com</p>
+                <div class="user-info">
+                    <h3 class="user-name">Kantin Bu Martin</h3>
+                    <p class="user-email">martin@kantin.com</p>
+                </div>
+                <a href="pedagang_edit_profil.html" class="profile-edit-link"><i class="fas fa-pen"></i></a>
             </div>
 
-            <ul class="profile-list">
-                <a href="pedagang_edit_profil.html" style="text-decoration: none; color: inherit;">
-                    <li class="profile-list-item">
-                        <span>Edit Profil Toko</span>
-                        <span><i class="fas fa-chevron-right"></i></span>
-                    </li>
-                </a>
-                <a href="#" style="text-decoration: none; color: inherit;">
-                    <li class="profile-list-item">
+            <div style="padding: 20px;">
+                
+                <div class="store-status" style="margin-bottom: 20px;">
+                    <h4>Status Toko (Buka)</h4>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="profile-list-group">
+                    <a href="#" class="profile-list-item">
+                        <i class="fas fa-wallet icon"></i>
                         <span>Pengaturan Pembayaran</span>
-                        <span><i class="fas fa-chevron-right"></i></span>
-                    </li>
-                </a>
-                <a href="#" style="text-decoration: none; color: inherit;">
-                    <li class="profile-list-item">
-                        <span>Bantuan</span>
-                        <span><i class="fas fa-chevron-right"></i></span>
-                    </li>
-                </a>
-                <li class="profile-list-item" style="padding: 0; margin-top: 20px;">
+                        <i class="fas fa-chevron-right chevron"></i>
+                    </a>
+                    <a href="pedagang_tab_kelola_menu.html" class="profile-list-item">
+                        <i class="fas fa-book-open icon"></i>
+                        <span>Shortcut: Kelola Menu</span>
+                        <i class="fas fa-chevron-right chevron"></i>
+                    </a>
+                </div>
+                
+                <div class="profile-list-group">
+                    <a href="#" class="profile-list-item">
+                        <i class="fas fa-question-circle icon"></i>
+                        <span>Pusat Bantuan</span>
+                        <i class="fas fa-chevron-right chevron"></i>
+                    </a>
+                    <a href="#" class="profile-list-item">
+                        <i class="fas fa-info-circle icon"></i>
+                        <span>Tentang Aplikasi</span>
+                        <i class="fas fa-chevron-right chevron"></i>
+                    </a>
+                </div>
+                
+                <div class="logout-button-container">
                     <a href="../login.html" class="logout-button">
                         <i class="fas fa-sign-out-alt"></i> &nbsp; Logout
                     </a>
-                </li>
-            </ul>
+                </div>
+            </div>
 
         </div>
         
