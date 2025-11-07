@@ -26,7 +26,7 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
     --success: #28a745;
     --danger: #dc3545;
     --warning: #ffc107;
-    --info: #007bff;
+    --info: #007bff; /* (BARU) Warna biru untuk status "Dimasak" */
 }
 
 /* =================================== */
@@ -170,17 +170,18 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     border: 1px solid var(--border-color);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     overflow: hidden;
 }
 .order-card-header {
-    padding: 16px 16px 12px 16px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 .order-card-header h4 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
 }
 .order-card-header .status-badge {
@@ -199,31 +200,8 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
 .order-card-header .status-success {
     background: var(--success);
 }
-.order-card-meta {
-    padding: 0px 16px 12px 16px; 
-    border-bottom: 1px dashed var(--border-color);
-    margin-bottom: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--light-text);
-}
-.order-card-meta .meta-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.order-card-meta .order-card-timer {
-    color: var(--dark-text); 
-    font-weight: 700;
-}
-.order-card-meta .order-card-timer i {
-    margin-right: 4px; 
-}
 .order-card-body {
-    padding: 0px 16px 12px 16px;
+    padding: 16px;
     font-size: 14px;
     line-height: 1.5;
 }
@@ -232,31 +210,9 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
     color: var(--light-text);
 }
 .order-card-body .items {
-    font-weight: 600;
+    font-weight: 500;
     color: var(--dark-text);
     margin-bottom: 4px;
-    font-size: 15px;
-}
-.order-card-body .total-amount {
-    font-weight: 700;
-    color: var(--dark-text);
-    margin-top: 8px;
-    font-size: 16px;
-}
-.order-card-notes {
-    background: #fff8e1;
-    color: #663c00;
-    padding: 10px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 4px 16px 16px 16px;
-    border-radius: 8px;
-}
-.order-card-notes i {
-    color: #cc9900;
 }
 .order-card-footer {
     padding: 12px 16px;
@@ -617,15 +573,20 @@ input:checked + .slider:before {
     font-weight: 600;
     cursor: pointer;
 }
+
+/* --- (ROMBAK TOTAL) KERANJANG PELANGGAN --- */
 .cart-item-card {
     background: #fff;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    margin-bottom: 12px;
+    /* border: 1px solid var(--border-color); */ /* Hapus border */
+    border-bottom: 1px solid var(--border-color); /* Ganti jadi pemisah bawah */
+    border-radius: 0; /* Hapus radius */
+    margin-bottom: 0;
     display: flex;
-    align-items: center;
-    padding: 12px;
+    padding: 16px 0; /* Atur padding */
     gap: 12px;
+}
+.cart-item-card:last-of-type {
+    border-bottom: none;
 }
 .cart-item-card .img-placeholder {
     width: 60px;
@@ -639,26 +600,133 @@ input:checked + .slider:before {
 }
 .cart-item-card .info h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
 .cart-item-card .info p { font-size: 14px; font-weight: 600; color: var(--dark-text); margin: 0; }
+.cart-item-card .info .item-notes {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+    margin-top: 6px;
+    display: inline-block;
+}
+.cart-item-card .item-delete {
+    font-size: 18px;
+    color: var(--danger);
+    cursor: pointer;
+    padding-left: 10px;
+}
 .cart-stepper {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 .cart-stepper button {
-    width: 28px;
-    height: 28px;
+    width: 30px; /* Sedikit lebih besar */
+    height: 30px;
     border: 1.5px solid var(--primary-color);
     background: #fff;
     color: var(--primary-color);
     border-radius: 50%;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
     cursor: pointer;
+    line-height: 1; /* Fix alignment */
 }
 .cart-stepper span {
     font-size: 16px;
     font-weight: 700;
+    min-width: 12px; /* Jaga jarak */
+    text-align: center;
 }
+
+/* (BARU) Baris Interaktif (Voucher, Payment) */
+.interactive-row {
+    background: #fff;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: var(--dark-text);
+}
+.interactive-row .info-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.interactive-row .info-group i {
+    font-size: 18px;
+    color: var(--primary-color);
+    width: 20px;
+    text-align: center;
+}
+.interactive-row .info-group span {
+    font-size: 15px;
+    font-weight: 600;
+}
+.interactive-row .action {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--light-text);
+}
+
+/* (BARU) Blok Ringkasan Pembayaran (Fix "Numpuk") */
+.summary-block {
+    background: #fff;
+    padding: 16px 0;
+}
+.summary-block .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--dark-text);
+    margin-bottom: 12px;
+}
+.summary-block .summary-row span:last-child {
+    font-weight: 600;
+}
+.summary-block .summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px solid #333;
+}
+
+/* (DIUBAH) Sticky Button Footer */
+.sticky-button-container {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border-color);
+    background-color: #ffffff;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.sticky-button-container .total-price {
+    flex-grow: 1;
+}
+.sticky-button-container .total-price p {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--light-text);
+    margin: 0;
+}
+.sticky-button-container .total-price h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin: 0;
+}
+.sticky-button-container .button {
+    width: 60%; /* Tidak full width */
+}
+
+/* --- (ROMBAK TOTAL) Tracker Status Pesanan Pelanggan --- */
 .unified-order-card {
     background: #fff;
     border-radius: 16px;
@@ -872,48 +940,4 @@ input:checked + .slider:before {
     border: 1.5px solid var(--primary-color);
     padding: 8px 12px;
     border-radius: 8px;
-}
-
-/* (BARU) KARTU LOG RIWAYAT DI LAPORAN */
-.history-log-card {
-    background: #fff;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-    margin-bottom: 12px;
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.history-log-card .icon-log {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--bg-light);
-    color: var(--success);
-    font-size: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-}
-.history-log-card .log-info {
-    flex-grow: 1;
-}
-.history-log-card .log-info h5 {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--dark-text);
-}
-.history-log-card .log-info p {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--light-text);
-    margin: 2px 0 0 0;
-}
-.history-log-card .log-amount {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--dark-text);
 }
