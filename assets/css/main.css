@@ -34,7 +34,10 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
 /* =================================== */
 .mobile-screen {
     width: 375px;
-    height: 812px;
+    /* MODIFIKASI: 
+      Tinggi diubah dari 812px menjadi 926px agar frame lebih panjang.
+    */
+    height: 926px;
     background-color: #ffffff;
     border: 1px solid #dcdcdc;
     border-radius: 40px;
@@ -544,8 +547,11 @@ input:checked + .slider:before {
 }
 .kategori-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    /* MODIFIKASI: 
+      Diubah dari 4 menjadi 5 kolom untuk mengakomodasi "Favorit".
+    */
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px; /* Dibuat lebih kecil agar muat */
     margin: 20px 0;
 }
 .kategori-item {
@@ -556,21 +562,22 @@ input:checked + .slider:before {
     color: var(--dark-text);
 }
 .kategori-item .icon-bg {
-    width: 60px;
-    height: 60px;
+    width: 54px; /* Dikecilkan dari 60px */
+    height: 54px; /* Dikecilkan dari 60px */
     border-radius: 12px;
     background: #fff;
     border: 1px solid var(--border-color);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
+    font-size: 22px; /* Dikecilkan dari 24px */
     margin-bottom: 8px;
     color: var(--primary-color);
 }
 .kategori-item span {
     font-size: 12px;
     font-weight: 600;
+    text-align: center;
 }
 .store-card {
     background: #fff;
