@@ -8,20 +8,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 </head>
 <body>
-
     <div class="mobile-screen">
         <div class="header" style="text-align: left;">
             Manajemen Pesanan
         </div>
-        
         <div class="tab-container">
             <a href="javascript:void(0)" class="tab-item active" onclick="showTab(event, 'masuk')">Masuk (1)</a>
             <a href="javascript:void(0)" class="tab-item" onclick="showTab(event, 'dimasak')">Dimasak (2)</a>
             <a href="javascript:void(0)" class="tab-item" onclick="showTab(event, 'siap')">Siap Diambil (1)</a>
         </div>
-        
         <div class="content" style="padding-top: 0;">
-            
             <div id="masuk" class="content-block">
                 <div class="order-card">
                     <div class="order-card-header">
@@ -45,12 +41,11 @@
                         <i class="fas fa-sticky-note"></i> Catatan: "Nasi Rames tidak pakai sayur, Es Teh es sedikit."
                     </div>
                     <div class="order-card-footer">
-                        <a href="pedagang_detail_pesanan.html" class="button secondary">Tolak</a>
-                        <a href="pedagang_detail_pesanan.html" class="button">Terima</a>
+                        <a href="pedagang_tolak_pesanan.html" class="button secondary">Tolak</a>
+                        <a href="pedagang_detail_pesanan.html" class="button">Terima & Lihat Detail</a>
                     </div>
                 </div>
             </div>
-            
             <div id="dimasak" class="content-block hidden">
                 <div class="order-card">
                     <div class="order-card-header">
@@ -100,7 +95,6 @@
                     </div>
                 </div> 
             </div>
-
             <div id="siap" class="content-block hidden">
                 <div class="order-card">
                     <div class="order-card-header">
@@ -126,9 +120,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-        
         <div class="navbar">
             <a href="pedagang_halaman_utama.html" class="nav-item">
                 <div class="icon"><i class="fas fa-chart-pie"></i></div>
@@ -152,7 +144,6 @@
             </a>
         </div>
     </div>
-
     <script>
         function showTab(event, tabId) {
             var contentBlocks = document.querySelectorAll('.content-block');

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tolak Pesanan - KantinKu</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</head>
+<body>
+
+    <div class="mobile-screen">
+        <div class="header">
+            <a href="pedagang_detail_pesanan.html" class="back-button">&lt;</a>
+            Alasan Penolakan
+        </div>
+        
+        <div class="content" style="background-color: #fff;">
+            <h3 class="section-title" style="margin-top: 0;">Mengapa Anda menolak pesanan ini?</h3>
+            <p style="font-size: 14px; color: var(--light-text); margin-top: -8px; margin-bottom: 20px;">
+                Pilih satu alasan. Ini akan diberitahukan ke pelanggan.
+            </p>
+
+            <div class="form-container">
+                <div class="radio-list-item">
+                    <input type="radio" id="alasan1" name="alasan" value="stok_habis" checked>
+                    <label for="alasan1">Stok/Menu Habis</label>
+                </div>
+                <div class="radio-list-item">
+                    <input type="radio" id="alasan2" name="alasan" value="toko_tutup">
+                    <label for="alasan2">Toko Tutup</label>
+                </div>
+                <div class="radio-list-item">
+                    <input type="radio" id="alasan3" name="alasan" value="terlalu_sibuk">
+                    <label for="alasan3">Terlalu Sibuk / Antrean Penuh</label>
+                </div>
+                <div class="radio-list-item">
+                    <input type="radio" id="alasan4" name="alasan" value="lainnya">
+                    <label for="alasan4">Lainnya</label>
+                </div>
+                
+                <textarea class="form-input" placeholder="Tulis alasan lain (opsional)..." style="margin-top: 12px; height: 80px;"></textarea>
+            </div>
+        </div>
+        
+        <div class="sticky-button-container">
+            <a href="pedagang_tab_pesanan.html" class="button danger">Konfirmasi Penolakan</a>
+        </div>
+    </div>
+
+</body>
+</html>
