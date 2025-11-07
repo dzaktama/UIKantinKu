@@ -5,15 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar - KantinKu</title>
     <link rel="stylesheet" href="assets/css/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <style>
+        /* CSS Khusus untuk layout Auth Baru */
+        .mobile-screen {
+            background-color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+        }
+        .auth-header {
+            flex-shrink: 0;
+            padding: 40px 24px 24px 24px;
+            color: white;
+            position: relative;
+        }
+        /* Tombol kembali kustom */
+        .auth-header .back-button {
+            position: absolute;
+            top: 40px;
+            left: 10px;
+            font-size: 28px;
+            color: white;
+            text-decoration: none;
+            padding: 5px 15px;
+        }
+        .auth-header h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            text-align: left;
+            margin: 0;
+            padding-top: 10px; /* Beri ruang untuk tombol back */
+        }
+        .auth-content {
+            flex-grow: 1;
+            background-color: white;
+            border-radius: 24px 24px 0 0;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Konten form bisa di-scroll jika panjang */
+        }
+        .auth-content .form-container {
+            flex-grow: 1;
+        }
+        .auth-footer {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--light-text);
+            margin-top: 24px;
+            flex-shrink: 0;
+        }
+        .auth-footer a {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 
     <div class="mobile-screen">
-        <div class="header">
-            Daftar Akun Baru
+        <div class="auth-header">
+            <a href="login.html" class="back-button">&lt;</a>
+            <h2>Buat Akun Baru</h2>
         </div>
         
-        <div class="content" style="background-color: white;">
+        <div class="auth-content">
             <div class="form-container">
                 <div class="form-group">
                     <label for="nama">Nama Lengkap</label>
@@ -32,26 +91,24 @@
                     <input type="password" id="confirm_password" class="form-input" placeholder="ulangi password">
                 </div>
                 <div class="form-group">
-                    <label>Daftar sebagai:</label>
-                    <div class="form-radio-group">
-                        <span>
-                            <input type="radio" id="role_mhs" name="role" value="mahasiswa" checked>
-                            <label for="role_mhs">Mahasiswa</label>
-                        </span>
-                        <span>
-                            <input type="radio" id="role_pedagang" name="role" value="pedagang">
-                            <label for="role_pedagang">Pedagang</label>
-                        </span>
+                    <label style="font-weight: 700;">Daftar sebagai:</label>
+                    <div class="radio-list-item" style="margin-top: 8px;">
+                        <input type="radio" id="role_mhs" name="role" value="mahasiswa" checked>
+                        <label for="role_mhs" style="margin-bottom: 0;">Mahasiswa (Pelanggan)</label>
+                    </div>
+                    <div class="radio-list-item" style="margin-top: 8px;">
+                        <input type="radio" id="role_pedagang" name="role" value="pedagang">
+                        <label for="role_pedagang" style="margin-bottom: 0;">Pedagang (Pemilik Kantin)</label>
                     </div>
                 </div>
 
                 <a href="login.html" class="button" style="margin-top: 24px;">Daftar Sekarang</a>
-                <a href="login.html" class="link text-center">
-                    Sudah punya akun? <strong>Login</strong>
-                </a>
+            </div>
+
+            <div class="auth-footer">
+                Sudah punya akun? <a href="login.html">Login</a>
             </div>
         </div>
     </div>
-
 </body>
 </html>

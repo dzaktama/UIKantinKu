@@ -6,56 +6,469 @@
     <title>Menu - KantinKu</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    
+    <style>
+        .mobile-screen { padding-bottom: 0; }
+        .content { padding: 0; background-color: #f0f2f5; }
+
+        /* 1. Banner & Tombol Kembali */
+        .store-banner-container {
+            width: 100%;
+            height: 200px;
+            background: #eee url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+        .store-banner-container .back-button-overlay {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            backdrop-filter: blur(2px);
+        }
+
+        /* 2. Blok Info Detail Kantin */
+        .store-info-block {
+            background: #fff;
+            padding: 16px 20px 20px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            position: relative;
+            z-index: 2;
+        }
+        .store-info-block h3 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+        .store-info-block .store-tags { font-size: 14px; color: var(--light-text); font-weight: 500; margin-bottom: 12px; }
+        .store-info-block .store-meta { display: flex; gap: 16px; font-size: 14px; font-weight: 600; }
+        .store-meta .meta-item i { color: var(--warning); }
+        .store-meta .meta-item.status-open i { color: var(--success); }
+
+        /* 3. Styling Menu (Hybrid: Klik & Stepper) */
+        .menu-category-title {
+            font-size: 18px;
+            font-weight: 700;
+            padding: 20px 20px 12px 20px;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+        
+        /* MODIFIKASI: Kartu menu di-flex untuk menampung stepper */
+        .menu-card-pelanggan {
+            margin: 0;
+            border-radius: 0;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            background: #fff;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+        /* Area yg bisa diklik untuk modal (kiri) */
+        .menu-info-clickable {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-grow: 1; /* Ambil sisa ruang */
+            cursor: pointer;
+        }
+        .menu-info-clickable .info {
+            flex-grow: 1;
+        }
+        /* Area stepper (kanan) */
+        .menu-stepper-container {
+            flex-shrink: 0; /* Jangan mengecil */
+        }
+        
+        /* MODIFIKASI BARU: Tombol + quick add */
+        .button-tambah-quick {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-color);
+            color: #fff;
+            border-radius: 8px;
+            border: none;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .button-tambah-quick.hidden, .cart-stepper-small.hidden {
+            display: none;
+        }
+        
+        /* MODIFIKASI BARU: Stepper kecil di list menu */
+        .cart-stepper-small {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cart-stepper-small button {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--primary-color);
+            background: #fff;
+            color: var(--primary-color);
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .cart-stepper-small .qty {
+            font-size: 16px;
+            font-weight: 700;
+            min-width: 12px;
+            text-align: center;
+        }
+        .menu-card-pelanggan .button-tambah { display: none; } /* Sembunyikan style lama */
+
+
+        /* 4. CSS Untuk Modal Detail Menu (dari langkah sebelumnya) */
+        .modal-overlay {
+            display: none; 
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+        }
+        .modal-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #f0f2f5;
+            border-radius: 20px 20px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+        .modal-overlay.show .modal-content { transform: translateY(0); }
+        .modal-header { padding: 12px 20px; text-align: right; }
+        .modal-close-button { font-size: 24px; color: #888; cursor: pointer; text-decoration: none; }
+        .modal-body { padding: 0 20px 20px 20px; background: #f0f2f5; }
+        .modal-body .img-placeholder {
+            width: 100%; height: 200px; border-radius: 12px; background: #ddd; margin-bottom: 16px;
+        }
+        .modal-body h3 { font-size: 22px; font-weight: 800; }
+        .modal-body .price { font-size: 18px; font-weight: 700; color: var(--dark-text); margin-top: 4px; }
+        .modal-body .description {
+            font-size: 14px; color: var(--light-text); margin-top: 12px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);
+        }
+        .modal-body .form-group { margin-top: 20px; }
+
+        /* 5. Stepper Kuantitas (di dalam Modal) (dari langkah sebelumnya) */
+        .modal-footer {
+            padding: 16px 20px; background: #fff; border-top: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .quantity-stepper { display: flex; align-items: center; gap: 12px; }
+        .quantity-stepper button {
+            width: 36px; height: 36px; border: 2px solid var(--primary-color);
+            background: #fff; color: var(--primary-color); border-radius: 50%;
+            font-size: 24px; font-weight: 700; cursor: pointer; line-height: 1;
+        }
+        .quantity-stepper .qty {
+            font-size: 20px; font-weight: 700; min-width: 20px; text-align: center;
+        }
+        .modal-footer .button { width: 60%; }
+
+        /* 6. Styling Tombol Keranjang Bawah */
+        .sticky-button-container {
+            z-index: 5; box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+        }
+        .sticky-button-container .total-price { flex-grow: 1; }
+        .sticky-button-container .total-price p {
+            font-size: 13px; font-weight: 600; color: var(--light-text); margin: 0;
+        }
+        .sticky-button-container .total-price h3 {
+            font-size: 18px; font-weight: 800; color: var(--dark-text); margin: 2px 0 0 0;
+        }
+        .sticky-button-container .button {
+            width: auto; padding: 14px 20px;
+        }
+    </style>
 </head>
 <body>
 
     <div class="mobile-screen">
-        <div class="header">
-            <a href="pelanggan_halaman_utama.html" class="back-button">&lt;</a>
-            Detail Kantin
+
+        <div class="store-banner-container">
+            <a href="pelanggan_halaman_utama.html" class="back-button-overlay">&lt;</a>
         </div>
 
-        <div style="padding: 20px; background: #fff; border-bottom: 1px solid var(--border-color);">
-            <h3 class="user-name" style="font-size: 24px; margin-bottom: 8px;">Kantin Bu Martin</h3>
-            <p style="font-size: 14px; color: var(--light-text); margin: 0;">Nasi, Soto, Gorengan</p>
-            <p style="font-size: 14px; font-weight: 600; color: var(--success); margin-top: 4px;">Buka</p>
+        <div class="store-info-block">
+            <h3>Kantin Bu Martin</h3>
+            <p class="store-tags">Nasi, Soto, Gorengan</p>
+            <div class="store-meta">
+                <div class="meta-item rating">
+                    <i class="fas fa-star"></i> <strong>4.8</strong> (100+)
+                </div>
+                <div class="meta-item status-open">
+                    <i class="fas fa-clock"></i> Buka • 08:00 - 16:00
+                </div>
+            </div>
         </div>
         
         <div class="content">
-            <h3 class="section-title">Aneka Nasi</h3>
+            
+            <h3 class="menu-category-title">Aneka Nasi</h3>
             
             <div class="menu-card-pelanggan">
-                <div class="img-placeholder"></div>
-                <div class="info">
-                    <h4>Nasi Rames Ayam</h4>
-                    <p>Rp 12.000</p>
+                <div class="menu-info-clickable" onclick="openMenuDetail('Nasi Rames Ayam', 12000, 'Nasi rames disajikan dengan ayam goreng, orek tempe, tumis buncis, dan sambal.', 'item1')">
+                    <div class="img-placeholder"></div>
+                    <div class="info">
+                        <h4>Nasi Rames Ayam</h4>
+                        <p>Rp 12.000</p>
+                    </div>
                 </div>
-                <button class="button-tambah">+</button>
-            </div>
-            <div class="menu-card-pelanggan">
-                <div class="img-placeholder"></div>
-                <div class="info">
-                    <h4>Nasi Soto Ayam</h4>
-                    <p>Rp 10.000</p>
+                <div class="menu-stepper-container">
+                    <button class="button-tambah-quick" id="btn-plus-item1" onclick="showStepper('item1', event)">+</button>
+                    <div class="cart-stepper-small hidden" id="stepper-item1">
+                        <button onclick="updateQtyOnMenu('item1', -1, event)">-</button>
+                        <span class="qty" id="qty-item1">1</span>
+                        <button onclick="updateQtyOnMenu('item1', 1, event)">+</button>
+                    </div>
                 </div>
-                <button class="button-tambah">+</button>
             </div>
 
-            <h3 class="section-title">Minuman</h3>
             <div class="menu-card-pelanggan">
-                <div class="img-placeholder"></div>
-                <div class="info">
-                    <h4>Es Teh Manis</h4>
-                    <p>Rp 3.000</p>
+                <div class="menu-info-clickable" onclick="openMenuDetail('Nasi Soto Ayam', 10000, 'Soto ayam kuah kuning bening dengan suwiran ayam, soun, tauge, dan telur.', 'item2')">
+                    <div class="img-placeholder"></div>
+                    <div class="info">
+                        <h4>Nasi Soto Ayam</h4>
+                        <p>Rp 10.000</p>
+                    </div>
                 </div>
-                <button class="button-tambah">+</button>
+                <div class="menu-stepper-container">
+                    <button class="button-tambah-quick" id="btn-plus-item2" onclick="showStepper('item2', event)">+</button>
+                    <div class="cart-stepper-small hidden" id="stepper-item2">
+                        <button onclick="updateQtyOnMenu('item2', -1, event)">-</button>
+                        <span class="qty" id="qty-item2">1</span>
+                        <button onclick="updateQtyOnMenu('item2', 1, event)">+</button>
+                    </div>
+                </div>
             </div>
+
+            <h3 class="menu-category-title">Minuman</h3>
+            
+            <div class="menu-card-pelanggan">
+                <div class="menu-info-clickable" onclick="openMenuDetail('Es Teh Manis', 3000, 'Teh manis disajikan dingin dengan es batu.', 'item3')">
+                    <div class="img-placeholder"></div>
+                    <div class="info">
+                        <h4>Es Teh Manis</h4>
+                        <p>Rp 3.000</p>
+                    </div>
+                </div>
+                <div class="menu-stepper-container">
+                    <button class="button-tambah-quick" id="btn-plus-item3" onclick="showStepper('item3', event)">+</button>
+                    <div class="cart-stepper-small hidden" id="stepper-item3">
+                        <button onclick="updateQtyOnMenu('item3', -1, event)">-</button>
+                        <span class="qty" id="qty-item3">1</span>
+                        <button onclick="updateQtyOnMenu('item3', 1, event)">+</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
         
         <div class="sticky-button-container">
-            <a href="pelanggan_keranjang.html" class="button">Lihat Keranjang (2 Item)</a>
+            <div class="total-price" id="cart-summary">
+                <p>0 Item</p>
+                <h3>Rp 0</h3>
+            </div>
+            <a href="pelanggan_keranjang.html" class="button">Lihat Keranjang</a>
         </div>
     </div>
+
+    <div class="modal-overlay" id="menuModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closeMenuDetail()">&times;</a>
+            </div>
+            <div class="modal-body">
+                <div class="img-placeholder"></div>
+                <h3 id="modalNamaMenu">Nama Menu</h3>
+                <p class="price" id="modalHargaMenu">Rp 0</p>
+                <p class="description" id="modalDeskripsiMenu">Deskripsi menu...</p>
+
+                <div class="form-group">
+                    <label for="catatan" style="font-weight: 700; font-size: 16px;">Catatan (Opsional)</label>
+                    <textarea id="catatan" class="form-input" style="margin-top: 8px; height: 60px;" placeholder="cth: Es teh jangan pakai es"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="quantity-stepper">
+                    <button id="btnMinusModal" onclick="updateQtyModal(-1)">-</button>
+                    <span class="qty" id="modalQty">1</span>
+                    <button id="btnPlusModal" onclick="updateQtyModal(1)">+</button>
+                </div>
+                <a href="javascript:void(0)" class="button" onclick="addToCartFromModal()">Tambah ke Keranjang</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('menuModal');
+        let currentModalQty = 1;
+        let currentModalItemId = null;
+        let currentModalPrice = 0;
+
+        // Simulasi database harga item
+        const itemPrices = {
+            'item1': 12000,
+            'item2': 10000,
+            'item3': 3000
+        };
+        
+        // Simulasi keranjang belanja
+        let cart = {
+            // 'item1': 2,
+            // 'item2': 1
+        };
+
+        // --- Fungsi Modal (yang sudah ada, sedikit dimodifikasi) ---
+        
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+        }
+
+        function openMenuDetail(nama, harga, deskripsi, itemId) {
+            currentModalItemId = itemId;
+            currentModalPrice = harga; // Simpan harga
+            
+            document.getElementById('modalNamaMenu').innerText = nama;
+            document.getElementById('modalHargaMenu').innerText = formatRupiah(harga);
+            document.getElementById('modalDeskripsiMenu').innerText = deskripsi;
+            
+            // Sinkronkan kuantitas modal dengan keranjang (jika ada)
+            currentModalQty = cart[itemId] || 1; 
+            document.getElementById('modalQty').innerText = currentModalQty;
+            document.getElementById('catatan').value = ''; // Reset catatan
+            document.getElementById('btnMinusModal').disabled = (currentModalQty === 1);
+            
+            modal.style.display = 'block';
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function closeMenuDetail() {
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function updateQtyModal(amount) {
+            currentModalQty += amount;
+            if (currentModalQty < 1) {
+                currentModalQty = 1;
+            }
+            document.getElementById('btnMinusModal').disabled = (currentModalQty === 1);
+            document.getElementById('modalQty').innerText = currentModalQty;
+        }
+
+        // Fungsi saat "Tambah ke Keranjang" dari MODAL diklik
+        function addToCartFromModal() {
+            const qty = currentModalQty;
+            const itemId = currentModalItemId;
+
+            // Update keranjang
+            cart[itemId] = qty;
+            
+            // Sinkronkan stepper di list menu
+            updateMenuStepper(itemId, qty);
+            updateCartSummary();
+            closeMenuDetail();
+        }
+
+        // --- Fungsi Stepper Menu (BARU) ---
+
+        // Menghentikan klik agar tidak membuka modal
+        function stopPropagation(event) {
+            event.stopPropagation();
+        }
+
+        // Menampilkan stepper saat tombol + diklik
+        function showStepper(itemId, event) {
+            stopPropagation(event);
+            cart[itemId] = 1; // Tambah 1 ke keranjang
+            updateMenuStepper(itemId, 1);
+            updateCartSummary();
+        }
+
+        // Update kuantitas dari stepper di list menu
+        function updateQtyOnMenu(itemId, amount, event) {
+            stopPropagation(event);
+            let currentQty = cart[itemId] || 0;
+            currentQty += amount;
+
+            if (currentQty <= 0) {
+                delete cart[itemId]; // Hapus dari keranjang
+                updateMenuStepper(itemId, 0);
+            } else {
+                cart[itemId] = currentQty; // Update keranjang
+                updateMenuStepper(itemId, currentQty);
+            }
+            updateCartSummary();
+        }
+
+        // --- Fungsi Sinkronisasi (BARU) ---
+
+        // Mensinkronkan tampilan stepper di list menu
+        function updateMenuStepper(itemId, qty) {
+            const btnPlus = document.getElementById('btn-plus-' + itemId);
+            const stepper = document.getElementById('stepper-' + itemId);
+            const qtySpan = document.getElementById('qty-' + itemId);
+
+            if (qty <= 0) {
+                stepper.classList.add('hidden');
+                btnPlus.classList.remove('hidden');
+            } else {
+                stepper.classList.remove('hidden');
+                btnPlus.classList.add('hidden');
+                qtySpan.innerText = qty;
+            }
+        }
+
+        // Mensinkronkan bar keranjang di bagian bawah
+        function updateCartSummary() {
+            let totalItems = 0;
+            let totalPrice = 0;
+
+            for (const itemId in cart) {
+                const qty = cart[itemId];
+                const price = itemPrices[itemId];
+                totalItems += qty;
+                totalPrice += (qty * price);
+            }
+
+            const summaryDiv = document.getElementById('cart-summary');
+            if (totalItems > 0) {
+                summaryDiv.innerHTML = `
+                    <p>${totalItems} Item</p>
+                    <h3>${formatRupiah(totalPrice)}</h3>
+                `;
+            } else {
+                summaryDiv.innerHTML = `
+                    <p>0 Item</p>
+                    <h3>Rp 0</h3>
+                `;
+            }
+        }
+        
+        // Panggil updateCartSummary saat halaman dimuat (jika ada item di keranjang)
+        window.onload = updateCartSummary;
+    </script>
 
 </body>
 </html>

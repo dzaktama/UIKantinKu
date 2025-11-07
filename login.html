@@ -5,15 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - KantinKu</title>
     <link rel="stylesheet" href="assets/css/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <style>
+        /* CSS Khusus untuk layout Auth Baru */
+        .mobile-screen {
+            background-color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+        }
+        .auth-header {
+            flex-shrink: 0;
+            padding: 40px 24px 24px 24px;
+            color: white;
+        }
+        .auth-header h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            text-align: left;
+            margin: 0;
+        }
+        .auth-header p {
+            font-size: 16px;
+            font-weight: 500;
+            color: white;
+            opacity: 0.9;
+            margin-top: 8px;
+        }
+        .auth-content {
+            flex-grow: 1;
+            background-color: white;
+            border-radius: 24px 24px 0 0;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+        .auth-content .form-container {
+            flex-grow: 1;
+        }
+        .auth-footer {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--light-text);
+            margin-top: 24px;
+        }
+        .auth-footer a {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 
     <div class="mobile-screen">
-        <div class="header" style="background-color: var(--primary-color); color: white;">
-            Selamat Datang di KantinKu
+        <div class="auth-header">
+            <h2>Login ke Akun Anda</h2>
+            <p>Selamat datang kembali!</p>
         </div>
         
-        <div class="content">
+        <div class="auth-content">
             <div class="form-container">
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -23,19 +75,36 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" class="form-input" placeholder="masukkan password">
                 </div>
-                <a href="#" class="link text-center">Lupa Password?</a>
+                <a href="lupa_password.html" class="link" style="text-align: right; display: block; font-weight: 600; font-size: 14px; color: var(--primary-color); text-decoration: none;">
+                    Lupa Password?
+                </a>
+                
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 24px 0;">
 
-                <a href="pelanggan/pelanggan_halaman_utama.html" class="button">Login Mahasiswa</a>
-                
-                <a href="pedagang/pedagang_halaman_utama.html" class="button secondary" style="margin-top: 12px;">Login Pedagang</a>
+                <a href="javascript:void(0);" onclick="login()" class="button">Login</a>
+            </div>
 
-                <a href="register.html" class="link text-center" style="margin-top: 24px;">
-                    Belum punya akun? <strong>Daftar di sini</strong>
-                </a>
+            <div class="auth-footer">
+                Belum punya akun? <a href="register.html">Daftar di sini</a>
             </div>
         </div>
     </div>
 
+    <script>
+        function login() {
+            // Simulasi pengecekan peran oleh sistem
+            var email = document.getElementById('email').value;
+            
+            // Anda bisa ganti ini dengan email pedagang untuk tes
+            if (email.toLowerCase() === 'pedagang@kantin.com') {
+                alert('Login sebagai Pedagang berhasil!');
+                window.location.href = 'pedagang/pedagang_halaman_utama.html';
+            } else {
+                // Asumsi default adalah pelanggan
+                alert('Login sebagai Pelanggan (Budi) berhasil!');
+                window.location.href = 'pelanggan/pelanggan_halaman_utama.html';
+            }
+        }
+    </script>
 </body>
 </html>
