@@ -81,7 +81,8 @@
                 
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 24px 0;">
 
-                <a href="javascript:void(0);" onclick="login()" class="button">Login</a>
+                <a href="pelanggan/pelanggan_halaman_utama.html" class="button">Login Mahasiswa</a>
+                <a href="pedagang/pedagang_halaman_utama.html" class="button secondary" style="margin-top: 12px;">Login Pedagang</a>
             </div>
 
             <div class="auth-footer">
@@ -90,21 +91,5 @@
         </div>
     </div>
 
-    <script>
-        function login() {
-            // Simulasi pengecekan peran oleh sistem
-            var email = document.getElementById('email').value;
-            
-            // Anda bisa ganti ini dengan email pedagang untuk tes
-            if (email.toLowerCase() === 'pedagang@kantin.com') {
-                alert('Login sebagai Pedagang berhasil!');
-                window.location.href = 'pedagang/pedagang_halaman_utama.html';
-            } else {
-                // Asumsi default adalah pelanggan
-                alert('Login sebagai Pelanggan (Budi) berhasil!');
-                window.location.href = 'pelanggan/pelanggan_halaman_utama.html';
-            }
-        }
-    </script>
-</body>
+    </body>
 </html>

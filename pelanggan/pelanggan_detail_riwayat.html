@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Riwayat - KantinKu</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <style>
+        .content { padding-top: 0; background-color: #f0f2f5; }
+        /* Style untuk info kantin di atas */
+        .history-kantin-header {
+            background: #fff;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .history-kantin-header .img-placeholder {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: #eee;
+            flex-shrink: 0;
+        }
+        .history-kantin-header h4 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        /* Style untuk card struk */
+        .unified-order-card {
+            margin: 0;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-screen">
+        <div class="header">
+            <a href="pelanggan_tab_pesanan.html#riwayat" class="back-button">&lt;</a>
+            Detail Riwayat Pesanan
+        </div>
+        
+        <div class="content">
+            
+            <div class="history-kantin-header">
+                <div class="img-placeholder"></div>
+                <h4>Kantin Dzaky</h4>
+            </div>
+
+            <div class="unified-order-card">
+                <div class="unified-header">
+                    <div class="info">
+                        <h4 style="font-size: 16px; color: var(--success);"><i class="fas fa-check-circle"></i> Pesanan Selesai</h4>
+                        <p style="font-size: 13px;">Selesai pada 07 Nov 2025, 10:35</p>
+                    </div>
+                    <span style="font-size: 13px; font-weight: 600; color: var(--light-text);">#12340GHI</span>
+                </div>
+
+                <div class="order-item-list">
+                    <div class="order-item-row" style="align-items: flex-start;">
+                        <div class="item-name">
+                            <span class="item-qty">1x</span>
+                            <div>
+                                <h5>Mie Ayam Bakso</h5>
+                                <p class="item-note-display" style="font-size: 12px; margin-top: 6px;">Catatan: Tidak pakai saos</p>
+                            </div>
+                        </div>
+                        <span class="item-price">Rp 15.000</span>
+                    </div>
+                </div>
+                
+                <div class="order-summary-block">
+                     <div class="summary-row">
+                        <span>Subtotal (1 item)</span>
+                        <span>Rp 15.000</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Biaya Layanan</span>
+                        <span>Rp 0</span>
+                    </div>
+                    <div class="summary-total">
+                        <span>Total Pembayaran</span>
+                        <span>Rp 15.000</span>
+                    </div>
+                </div>
+
+                <div class="unified-footer">
+                    <p style="font-weight: 600; color: var(--dark-text);">Metode Pembayaran</p>
+                    <span style="font-size: 14px; font-weight: 700; color: var(--info);">E-Wallet</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sticky-button-container" style="display: flex; gap: 10px;">
+            <a href="#" class="button secondary">Bantuan</a>
+            <a href="pelanggan_detail_warung.html" class="button">Pesan Lagi</a>
+        </div>
+    </div>
+
+</body>
+</html>

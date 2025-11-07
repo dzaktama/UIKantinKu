@@ -22,6 +22,80 @@
         #aktif .unified-footer { padding: 12px 20px; }
         #aktif .unified-footer p { font-size: 11px; }
         #aktif .unified-footer .help-button { font-size: 13px; padding: 6px 10px; }
+
+        /* MODIFIKASI TOTAL CSS (v3): 
+            Untuk Desain Riwayat yang Jauh Lebih Baik (Ala Grab/Shopee)
+        */
+        
+        /* 1. Hapus background abu-abu di tab riwayat */
+        #riwayat.content-block {
+            background-color: #fff;
+            padding: 0;
+            margin: 0 -20px; /* Full-width */
+        }
+        
+        /* 2. Style Kartu Riwayat Baru */
+        .history-card-new {
+            background: #fff;
+            margin-bottom: 10px; /* Jarak antar kartu */
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        /* 3. Header Kartu (Nama Kantin & Status) */
+        .history-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px 12px 20px;
+        }
+        .history-card-header h4 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .history-card-header .status-badge {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+            color: #fff;
+            background: var(--success);
+        }
+
+        /* 4. Body Kartu (Item & Tanggal - Klikabel) */
+        .history-card-body {
+            display: flex;
+            padding: 0px 20px 16px 20px;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--dark-text);
+        }
+        .history-card-body .img-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background: #eee;
+            flex-shrink: 0;
+        }
+        .history-card-body .info {
+            flex-grow: 1;
+        }
+        .history-card-body .info .items {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin: 0 0 6px 0;
+        }
+        .history-card-body .info .date {
+            font-size: 13px;
+            color: var(--light-text);
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* 5. Footer Kartu (Total & Tombol) */
+        .history-card-new .order-card-footer {
+            border-top: 1px solid var(--border-color); /* Garis pemisah tipis */
+        }
     </style>
 </head>
 <body>
@@ -40,61 +114,26 @@
             
             <div id="aktif" class="content-block">
                 <div class="unified-order-card">
-                    <div class="unified-header">
-                        <div class="info">
-                            <h4>Kantin Bu Martin</h4>
-                            <p>Lihat detail pesanan</p>
-                        </div>
-                        <a class="toggle-detail" onclick="toggleDetails(this)">Lihat</a>
-                    </div>
-                    <div id="orderDetails" class="hidden">
-                        <div class="order-item-list">
-                            <div class="order-item-row">
-                                <div class="item-name"><span class="item-qty">1x</span><h5>Nasi Rames Ayam</h5></div>
-                                <span class="item-price">Rp 12.000</span>
-                            </div>
-                            <div class="order-item-row">
-                                <div class="item-name"><span class="item-qty">1x</span><h5>Es Teh Manis</h5></div>
-                                <span class="item-price">Rp 3.000</span>
-                            </div>
-                        </div>
-                        <div class="order-summary-block">
-                            <div class="summary-row"><span>Subtotal</span><span>Rp 15.000</span></div>
-                            <div class="summary-row"><span>Biaya Layanan</span><span>Rp 1.000</span></div>
-                            <div class="summary-total"><span>Total</span><span>Rp 16.000</span></div>
-                        </div>
-                    </div>
-                    <div class="unified-body">
-                        <div class="estimasi-block">
-                            <p>Estimasi Siap Diambil</p>
-                            <h2>10:30</h2>
-                        </div>
-                        <ol class="rich-tracker">
-                            <li class="completed"><strong>Pesanan Dikonfirmasi</strong><span>10:15 - Kantin Bu Martin</span></li>
-                            <li class="active"><strong>Pesanan Dimasak</strong><span>Pedagang sedang menyiapkan pesananmu.</span></li>
-                            <li><strong>Siap Diambil</strong><span>Silakan ambil di Kantin Bu Martin.</span></li>
-                        </ol>
-                    </div>
-                    <div class="unified-footer">
-                        <p>ID Pesanan: #12345ABC</p>
-                        <a href="#" class="help-button">Butuh Bantuan?</a>
-                    </div>
+                    <div class="unified-header"><div class="info"><h4>Kantin Bu Martin</h4><p>Lihat detail pesanan</p></div><a class="toggle-detail" onclick="toggleDetails(this)">Lihat</a></div>
+                    <div id="orderDetails" class="hidden"><div class="order-item-list"><div class="order-item-row"><div class="item-name"><span class="item-qty">1x</span><h5>Nasi Rames Ayam</h5></div><span class="item-price">Rp 12.000</span></div><div class="order-item-row"><div class="item-name"><span class="item-qty">1x</span><h5>Es Teh Manis</h5></div><span class="item-price">Rp 3.000</span></div></div><div class="order-summary-block"><div class="summary-row"><span>Subtotal</span><span>Rp 15.000</span></div><div class="summary-row"><span>Biaya Layanan</span><span>Rp 1.000</span></div><div class="summary-total"><span>Total</span><span>Rp 16.000</span></div></div></div>
+                    <div class="unified-body"><div class="estimasi-block"><p>Estimasi Siap Diambil</p><h2>10:30</h2></div><ol class="rich-tracker"><li class="completed"><strong>Pesanan Dikonfirmasi</strong><span>10:15 - Kantin Bu Martin</span></li><li class="active"><strong>Pesanan Dimasak</strong><span>Pedagang sedang menyiapkan pesananmu.</span></li><li><strong>Siap Diambil</strong><span>Silakan ambil di Kantin Bu Martin.</span></li></ol></div>
+                    <div class="unified-footer"><p>ID Pesanan: #12345ABC</p><a href="#" class="help-button">Butuh Bantuan?</a></div>
                 </div>
             </div>
             
             <div id="riwayat" class="content-block hidden">
                 
-                <div class="order-card">
-                    <div class="order-card-header">
+                <div class="history-card-new">
+                    <div class="history-card-header">
                         <h4>Kantin Dzaky</h4>
-                        <span class="status-badge status-success">SELESAI</span>
+                        <span class="status-badge">SELESAI</span>
                     </div>
-                    <div class="order-card-body">
-                        <p style="font-weight: 500; color: var(--light-text); margin-bottom: 8px;">
-                            <i class="fas fa-calendar-alt"></i> 07 Nov 2025, 10:35
-                        </p>
-                        <p class="items">1 items: Mie Ayam Bakso</p>
-                    </div>
+                    <a href="pelanggan_detail_riwayat.html" class="history-card-body">
+                        <div class="img-placeholder"></div> <div class="info">
+                            <p class="items">Mie Ayam Bakso</p>
+                            <p class="date"><i class="fas fa-calendar-alt"></i> 07 Nov 2025, 10:35</p>
+                        </div>
+                    </a>
                     <div class="order-card-footer">
                         <div class="total-price-history">
                             <p>Total</p>
@@ -107,40 +146,40 @@
                     </div>
                 </div>
                 
-                <div class="order-card">
-                    <div class="order-card-header">
+                <div class="history-card-new">
+                    <div class="history-card-header">
                         <h4>Kantin Bu Martin</h4>
-                        <span class="status-badge status-success">SELESAI</span>
+                        <span class="status-badge">SELESAI</span>
                     </div>
-                    <div class="order-card-body">
-                        <p style="font-weight: 500; color: var(--light-text); margin-bottom: 8px;">
-                            <i class="fas fa-calendar-alt"></i> 06 Nov 2025, 12:05
-                        </p>
-                        <p class="items">2 items: Nasi Rames Ayam, Es Teh Manis</p>
-                    </div>
+                    <a href="pelanggan_detail_riwayat.html" class="history-card-body">
+                        <div class="img-placeholder"></div> <div class="info">
+                            <p class="items">Nasi Rames Ayam + 1 lainnya</p>
+                            <p class="date"><i class="fas fa-calendar-alt"></i> 06 Nov 2025, 12:05</p>
+                        </div>
+                    </a>
                     <div class="order-card-footer">
                         <div class="total-price-history">
                             <p>Total</p>
                             <h4>Rp 16.000</h4>
                         </div>
                         <div class="button-group">
-                            <a href="pelanggan_beri_rating.html" class="button secondary">Beri Rating</a>
+                            <a href="#" class="button secondary" style="opacity: 0.6; cursor: default;">Dirating</a>
                             <a href="pelanggan_detail_warung.html" class="button">Pesan Lagi</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="order-card">
-                    <div class="order-card-header">
+                <div class="history-card-new">
+                    <div class="history-card-header">
                         <h4>Kantin Ardan</h4>
-                        <span class="status-badge status-success">SELESAI</span>
+                        <span class="status-badge">SELESAI</span>
                     </div>
-                     <div class="order-card-body">
-                        <p style="font-weight: 500; color: var(--light-text); margin-bottom: 8px;">
-                            <i class="fas fa-calendar-alt"></i> 05 Nov 2025, 14:30
-                        </p>
-                        <p class="items">1 items: Jus Alpukat</p>
-                    </div>
+                    <a href="pelanggan_detail_riwayat.html" class="history-card-body">
+                        <div class="img-placeholder"></div> <div class="info">
+                            <p class="items">Jus Alpukat</p>
+                            <p class="date"><i class="fas fa-calendar-alt"></i> 05 Nov 2025, 14:30</p>
+                        </div>
+                    </a>
                     <div class="order-card-footer">
                         <div class="total-price-history">
                             <p>Total</p>
@@ -178,23 +217,17 @@
             contentBlocks.forEach(function(block) {
                 block.classList.add('hidden');
             });
-
             var tabItems = document.querySelectorAll('.tab-item');
             tabItems.forEach(function(tab) {
                 tab.classList.remove('active');
             });
-
             document.getElementById(tabId).classList.remove('hidden');
-            
-            // Cek jika event berasal dari klik (bukan null)
             if (event) {
                 event.currentTarget.classList.add('active');
             } else {
-                // Jika event null (dipanggil oleh script), cari tab berdasarkan tabId
                 document.getElementById('tab-' + tabId).classList.add('active');
             }
         }
-
         function toggleDetails(button) {
             var details = document.getElementById('orderDetails');
             if (details.classList.contains('hidden')) {
@@ -205,16 +238,8 @@
                 button.textContent = 'Lihat';
             }
         }
-
-        /*
-            MODIFIKASI BARU:
-            Script ini mengecek hash di URL saat halaman dimuat.
-            Jika URL-nya adalah "....html#riwayat",
-            maka akan otomatis mengklik tab Riwayat.
-        */
         window.onload = function() {
             if (window.location.hash === '#riwayat') {
-                // Panggil showTab tanpa event (null) dan dengan ID 'riwayat'
                 showTab(null, 'riwayat');
             }
         };
