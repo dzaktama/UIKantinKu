@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesanan - KantinKu</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</head>
+<body>
+
+    <div class="mobile-screen">
+        <div class="header" style="text-align: left;">
+            Manajemen Pesanan
+        </div>
+        
+        <div class="tab-container">
+            <a href="javascript:void(0)" class="tab-item active" onclick="showTab(event, 'masuk')">Masuk (1)</a>
+            <a href="javascript:void(0)" class="tab-item" onclick="showTab(event, 'dimasak')">Dimasak (2)</a>
+            <a href="javascript:void(0)" class="tab-item" onclick="showTab(event, 'siap')">Siap Diambil (0)</a>
+        </div>
+        
+        <div class="content" style="padding-top: 0;">
+            
+            <div id="masuk" class="content-block">
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <h4>Budi Santoso</h4>
+                        <span class="status-badge status-warning">BARU</span>
+                    </div>
+                    <div class="order-card-body">
+                        <p class="items">1x Nasi Rames Ayam, 1x Es Teh</p>
+                        <p>Total: Rp 15.000</p>
+                    </div>
+                    <div class="order-card-footer">
+                        <a href="pedagang_detail_pesanan.html" class="button secondary">Tolak</a>
+                        <a href="pedagang_detail_pesanan.html" class="button">Terima</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="dimasak" class="content-block hidden">
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <h4>Andi</h4>
+                        <span class="status-badge status-info">DIMASAK</span>
+                    </div>
+                    <div class="order-card-body">
+                        <p class="items">1x Mie Ayam Bakso</p>
+                        <p>Total: Rp 15.000</p>
+                    </div>
+                    <div class="order-card-footer">
+                        <a href="#" class="button">Pesanan Siap</a>
+                    </div>
+                </div> 
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <h4>Citra</h4>
+                        <span class="status-badge status-info">DIMASAK</span>
+                    </div>
+                    <div class="order-card-body">
+                        <p class="items">2x Nasi Goreng</p>
+                        <p>Total: Rp 30.000</p>
+                    </div>
+                    <div class="order-card-footer">
+                        <a href="#" class="button">Pesanan Siap</a>
+                    </div>
+                </div> 
+            </div>
+
+            <div id="siap" class="content-block hidden">
+                <div class="card" style="text-align: center;">
+                    <div class="card-info">
+                        <p style="font-size: 16px; font-weight: 500;">Tidak ada pesanan yang siap diambil.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="navbar">
+            <a href="pedagang_halaman_utama.html" class="nav-item">
+                <div class="icon"><i class="fas fa-chart-pie"></i></div>
+                <div>Dashboard</div>
+            </a>
+            <a href="pedagang_tab_pesanan.html" class="nav-item active">
+                <div class="icon"><i class="fas fa-receipt"></i></div>
+                <div>Pesanan</div>
+            </a>
+            <a href="pedagang_tab_kelola_menu.html" class="nav-item">
+                <div class="icon"><i class="fas fa-book-open"></i></div>
+                <div>Menu</div>
+            </a>
+            <a href="pedagang_tab_laporan.html" class="nav-item">
+                <div class="icon"><i class="fas fa-chart-line"></i></div>
+                <div>Laporan</div>
+            </a>
+            <a href="pedagang_tab_profil.html" class="nav-item">
+                <div class="icon"><i class="fas fa-user-circle"></i></div>
+                <div>Profil</div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function showTab(event, tabId) {
+            // 1. Sembunyikan semua content blocks
+            var contentBlocks = document.querySelectorAll('.content-block');
+            contentBlocks.forEach(function(block) {
+                block.classList.add('hidden');
+            });
+
+            // 2. Non-aktifkan semua tab items
+            var tabItems = document.querySelectorAll('.tab-item');
+            tabItems.forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+
+            // 3. Tampilkan content block yang dipilih
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // 4. Aktifkan tab item yang diklik
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
