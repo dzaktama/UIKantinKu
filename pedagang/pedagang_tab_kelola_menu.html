@@ -8,7 +8,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 
     <style>
-        /* (CSS dari langkah sebelumnya) */
         .menu-item-card-pedagang {
             background: #fff; border-radius: 12px; border: 1px solid var(--border-color);
             box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 12px; overflow: hidden;
@@ -20,44 +19,27 @@
             width: 70px; height: 70px; border-radius: 8px; background: #eee; flex-shrink: 0;
         }
         .menu-item-main .info {
-            flex-grow: 1; cursor: pointer;
+            flex-grow: 1;
+            /* MODIFIKASI: Menghapus cursor:pointer karena modal stok dihapus */
         }
         .menu-item-main .info h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
         .menu-item-main .info p { font-size: 14px; font-weight: 600; color: var(--dark-text); margin: 0 0 8px 0; }
-        .stock-status { font-size: 13px; font-weight: 700; }
-        .stock-status.available { color: var(--success); }
-        .stock-status.sold-out { color: var(--danger); }
+        
+        /* MODIFIKASI BARU: Style untuk kuantitas stok */
+        .stock-quantity {
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .stock-quantity.available { color: var(--success); }
+        .stock-quantity.low { color: var(--warning); }
+        .stock-quantity.sold-out { color: var(--danger); }
+
         .menu-item-main .edit-link {
             font-size: 14px; font-weight: 600; color: var(--primary-color); text-decoration: none; flex-shrink: 0;
         }
-        /* Modal */
-        .modal-overlay {
-            display: none; position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 99;
-        }
-        .modal-content {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            background: #f0f2f5; border-radius: 20px 20px 0 0;
-            transform: translateY(100%); transition: transform 0.3s ease-out;
-            max-height: 90%;
-        }
-        .modal-overlay.show .modal-content { transform: translateY(0); }
-        .modal-header {
-            padding: 16px 20px; background: #fff; border-bottom: 1px solid var(--border-color);
-            border-radius: 20px 20px 0 0;
-        }
-        .modal-header h3 { font-size: 18px; font-weight: 700; text-align: center; margin: 0; }
-        .modal-close-button {
-            position: absolute; top: 12px; right: 16px;
-            font-size: 24px; color: #888; cursor: pointer; text-decoration: none;
-        }
-        .modal-body { padding: 20px; }
-        .modal-body .radio-list-item { background: #fff; }
+        
+        /* MODIFIKASI: Menghapus CSS Modal */
 
-        /* MODIFIKASI BARU: 
-            Menambah padding di bawah .content agar item terakhir
-            tidak tertutup oleh .sticky-button-container baru
-        */
         .content {
             padding-bottom: 80px; /* Jarak aman */
         }
@@ -71,16 +53,20 @@
         
         <div class="content">
             <input type="text" class="search-bar" placeholder="Cari menu...">
+            
+            <a href="pedagang_atur_urutan.html" class="button secondary" style="margin-top: 16px;">
+                <i class="fas fa-sort"></i> Atur Urutan Menu
+            </a>
 
             <h3 class="section-title">Makanan (3)</h3>
             
             <div class="menu-item-card-pedagang">
                 <div class="menu-item-main">
                     <div class="img-placeholder"></div>
-                    <div class="info" onclick="openStockModal('item1', 'Nasi Rames Ayam', 'available')">
+                    <div class="info">
                         <h4>Nasi Rames Ayam</h4>
                         <p>Rp 12.000</p>
-                        <span class="stock-status available" id="status-item1">Tersedia</span>
+                        <span class="stock-quantity available" id="status-item1">Stok: 50</span>
                     </div>
                     <a href="pedagang_tambah_edit_menu.html?mode=edit&id=1" class="edit-link">Edit</a>
                 </div>
@@ -89,10 +75,10 @@
             <div class="menu-item-card-pedagang">
                 <div class="menu-item-main">
                     <div class="img-placeholder"></div>
-                    <div class="info" onclick="openStockModal('item2', 'Nasi Soto Ayam', 'available')">
+                    <div class="info">
                         <h4>Nasi Soto Ayam</h4>
                         <p>Rp 10.000</p>
-                        <span class="stock-status available" id="status-item2">Tersedia</span>
+                        <span class="stock-quantity low" id="status-item2">Stok: 5</span>
                     </div>
                     <a href="pedagang_tambah_edit_menu.html?mode=edit&id=2" class="edit-link">Edit</a>
                 </div>
@@ -101,10 +87,10 @@
             <div class="menu-item-card-pedagang">
                 <div class="menu-item-main">
                     <div class="img-placeholder"></div>
-                    <div class="info" onclick="openStockModal('item3', 'Mie Ayam Bakso', 'available')">
+                    <div class="info">
                         <h4>Mie Ayam Bakso</h4>
                         <p>Rp 15.000</p>
-                        <span class="stock-status available" id="status-item3">Tersedia</span>
+                        <span class="stock-quantity available" id="status-item3">Stok: 30</span>
                     </div>
                     <a href="pedagang_tambah_edit_menu.html?mode=edit&id=3" class="edit-link">Edit</a>
                 </div>
@@ -115,10 +101,10 @@
             <div class="menu-item-card-pedagang">
                 <div class="menu-item-main">
                     <div class="img-placeholder"></div>
-                    <div class="info" onclick="openStockModal('item4', 'Es Teh Manis', 'sold-out')">
+                    <div class="info">
                         <h4>Es Teh Manis</h4>
                         <p>Rp 3.000</p>
-                        <span class="stock-status sold-out" id="status-item4">Habis Hari Ini</span>
+                        <span class="stock-quantity sold-out" id="status-item4">Stok: 0 (Habis)</span>
                     </div>
                     <a href="pedagang_tambah_edit_menu.html?mode=edit&id=4" class="edit-link">Edit</a>
                 </div>
@@ -127,10 +113,10 @@
             <div class="menu-item-card-pedagang">
                 <div class="menu-item-main">
                     <div class="img-placeholder"></div>
-                    <div class="info" onclick="openStockModal('item5', 'Jus Alpukat', 'available')">
+                    <div class="info">
                         <h4>Jus Alpukat</h4>
                         <p>Rp 8.000</p>
-                        <span class="stock-status available" id="status-item5">Tersedia</span>
+                        <span class="stock-quantity available" id="status-item5">Stok: 20</span>
                     </div>
                     <a href="pedagang_tambah_edit_menu.html?mode=edit&id=5" class="edit-link">Edit</a>
                 </div>
@@ -166,82 +152,5 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="stockModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalItemName">Kelola Stok</h3>
-                <a href="javascript:void(0)" class="modal-close-button" onclick="closeStockModal()">&times;</a>
-            </div>
-            <div class="modal-body">
-                <div class="form-container" style="padding: 0;">
-                    <input type="hidden" id="modalItemId">
-                    <div class="radio-list-item">
-                        <input type="radio" id="stok_available" name="stok" value="available">
-                        <label for="stok_available">Tersedia</label>
-                    </div>
-                    <div class="radio-list-item">
-                        <input type="radio" id="stok_sold-out" name="stok" value="sold-out">
-                        <label for="stok_sold-out">Habis Hari Ini</label>
-                    </div>
-                    <div class="radio-list-item">
-                        <input type="radio" id="stok_hidden" name="stok" value="hidden">
-                        <label for="stok_hidden">Sembunyikan Permanen</label>
-                    </div>
-                </div>
-            </div>
-            <div class="sticky-button-container">
-                <a href="javascript:void(0)" class="button" onclick="updateStock()">Simpan</a>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const modal = document.getElementById('stockModal');
-        
-        let itemStatus = {
-            'item1': 'available',
-            'item2': 'available',
-            'item3': 'available',
-            'item4': 'sold-out',
-            'item5': 'available'
-        };
-
-        function openStockModal(itemId, itemName, currentStatusKey) {
-            document.getElementById('modalItemId').value = itemId;
-            document.getElementById('modalItemName').innerText = `Kelola Stok: ${itemName}`;
-            document.getElementById(`stok_${currentStatusKey}`).checked = true;
-            
-            modal.style.display = 'block';
-            setTimeout(() => modal.classList.add('show'), 10);
-        }
-
-        function closeStockModal() {
-            modal.classList.remove('show');
-            setTimeout(() => modal.style.display = 'none', 300);
-        }
-
-        function updateStock() {
-            const itemId = document.getElementById('modalItemId').value;
-            const newStatus = document.querySelector('input[name="stok"]:checked').value;
-            
-            itemStatus[itemId] = newStatus;
-            
-            const statusSpan = document.getElementById('status-' + itemId);
-            if (newStatus === 'available') {
-                statusSpan.innerText = 'Tersedia';
-                statusSpan.className = 'stock-status available';
-            } else if (newStatus === 'sold-out') {
-                statusSpan.innerText = 'Habis Hari Ini';
-                statusSpan.className = 'stock-status sold-out';
-            } else {
-                statusSpan.innerText = 'Disembunyikan';
-                statusSpan.className = 'stock-status sold-out';
-            }
-            
-            closeStockModal();
-            alert('Status stok diperbarui!');
-        }
-    </script>
-
-</body>
+    </body>
 </html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atur Urutan Menu - KantinKu</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <style>
+        .content { background-color: #fff; }
+        .sortable-category {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark-text);
+            padding: 16px 20px;
+            background: var(--bg-light);
+            border-bottom: 1px solid var(--border-color);
+            margin: 0 -20px 10px -20px;
+        }
+        .sortable-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sortable-item:last-child {
+            border-bottom: none;
+        }
+        .sortable-item .handle {
+            font-size: 20px;
+            color: #ccc;
+            margin-right: 12px;
+            cursor: grab;
+        }
+        .sortable-item .info {
+            flex-grow: 1;
+        }
+        .sortable-item .info h5 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .sortable-item .controls {
+            display: flex;
+            gap: 8px;
+        }
+        .sortable-item .controls button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            font-size: 18px;
+            color: var(--dark-text);
+            cursor: pointer;
+        }
+        .sortable-item .controls button:active {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-screen">
+        <div class="header">
+            <a href="pedagang_tab_kelola_menu.html" class="back-button">&lt;</a>
+            Atur Urutan Menu
+        </div>
+        
+        <div class="content" id="sortable-list">
+            <p style="font-size: 14px; color: var(--light-text); margin-top: 0; margin-bottom: 20px;">
+                Tekan panah "Naik" atau "Turun" untuk mengubah urutan menu yang akan dilihat pelanggan.
+            </p>
+
+            <div class="sortable-category">Makanan</div>
+            <div class="sortable-item">
+                <i class="fas fa-bars handle"></i>
+                <div class="info"><h5>Nasi Rames Ayam</h5></div>
+                <div class="controls">
+                    <button onclick="moveItem(this, 'up')"><i class="fas fa-arrow-up"></i></button>
+                    <button onclick="moveItem(this, 'down')"><i class="fas fa-arrow-down"></i></button>
+                </div>
+            </div>
+            <div class="sortable-item">
+                <i class="fas fa-bars handle"></i>
+                <div class="info"><h5>Nasi Soto Ayam</h5></div>
+                <div class="controls">
+                    <button onclick="moveItem(this, 'up')"><i class="fas fa-arrow-up"></i></button>
+                    <button onclick="moveItem(this, 'down')"><i class="fas fa-arrow-down"></i></button>
+                </div>
+            </div>
+            <div class="sortable-item">
+                <i class="fas fa-bars handle"></i>
+                <div class="info"><h5>Mie Ayam Bakso</h5></div>
+                <div class="controls">
+                    <button onclick="moveItem(this, 'up')"><i class="fas fa-arrow-up"></i></button>
+                    <button onclick="moveItem(this, 'down')"><i class="fas fa-arrow-down"></i></button>
+                </div>
+            </div>
+            
+            <div class="sortable-category" style="margin-top: 20px;">Minuman</div>
+            <div class="sortable-item">
+                <i class="fas fa-bars handle"></i>
+                <div class="info"><h5>Es Teh Manis</h5></div>
+                <div class="controls">
+                    <button onclick="moveItem(this, 'up')"><i class="fas fa-arrow-up"></i></button>
+                    <button onclick="moveItem(this, 'down')"><i class="fas fa-arrow-down"></i></button>
+                </div>
+            </div>
+            <div class="sortable-item">
+                <i class="fas fa-bars handle"></i>
+                <div class="info"><h5>Jus Alpukat</h5></div>
+                <div class="controls">
+                    <button onclick="moveItem(this, 'up')"><i class="fas fa-arrow-up"></i></button>
+                    <button onclick="moveItem(this, 'down')"><i class="fas fa-arrow-down"></i></button>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="sticky-button-container">
+            <a href="pedagang_tab_kelola_menu.html" class="button" onclick="alert('Urutan disimpan!')">Simpan Urutan</a>
+        </div>
+    </div>
+
+    <script>
+        function moveItem(buttonEl, direction) {
+            const item = buttonEl.closest('.sortable-item');
+            
+            if (direction === 'up') {
+                const prevItem = item.previousElementSibling;
+                // Cek jika item di atasnya adalah item lain (bukan judul kategori)
+                if (prevItem && prevItem.classList.contains('sortable-item')) {
+                    item.parentNode.insertBefore(item, prevItem);
+                }
+            } else if (direction === 'down') {
+                const nextItem = item.nextElementSibling;
+                // Cek jika item di bawahnya adalah item lain
+                if (nextItem && nextItem.classList.contains('sortable-item')) {
+                    item.parentNode.insertBefore(nextItem, item);
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
