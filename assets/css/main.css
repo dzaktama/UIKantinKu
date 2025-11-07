@@ -174,13 +174,13 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
     overflow: hidden;
 }
 .order-card-header {
-    padding: 16px 16px 12px 16px; /* Tambah padding atas bawah */
+    padding: 16px 16px 12px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 .order-card-header h4 {
-    font-size: 18px; /* Lebih besar */
+    font-size: 18px;
     font-weight: 700;
 }
 .order-card-header .status-badge {
@@ -199,22 +199,18 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
 .order-card-header .status-success {
     background: var(--success);
 }
-
-/* --- (ROMBAK TOTAL) ORDER CARD META --- */
 .order-card-meta {
     padding: 0px 16px 12px 16px; 
     border-bottom: 1px dashed var(--border-color);
     margin-bottom: 12px;
-    
-    display: flex; /* (BARU) */
-    flex-direction: column; /* (BARU) Blok jadi vertikal */
-    gap: 6px; /* (BARU) Jarak antar baris meta */
-
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
     font-size: 13px;
     font-weight: 600;
     color: var(--light-text);
 }
-.order-card-meta .meta-row { /* (BARU) Wrapper untuk flex */
+.order-card-meta .meta-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -226,8 +222,6 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
 .order-card-meta .order-card-timer i {
     margin-right: 4px; 
 }
-/* --- AKHIR ROMBAK --- */
-
 .order-card-body {
     padding: 0px 16px 12px 16px;
     font-size: 14px;
@@ -258,8 +252,8 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
     display: flex;
     align-items: center;
     gap: 8px;
-    margin: 4px 16px 16px 16px; /* (DIUBAH) Margin atas/bawah */
-    border-radius: 8px; /* (BARU) */
+    margin: 4px 16px 16px 16px;
+    border-radius: 8px;
 }
 .order-card-notes i {
     color: #cc9900;
@@ -505,7 +499,7 @@ input:checked + .slider:before {
 }
 
 /* =================================== */
-/* KOMPONEN UI PELANGGAN */
+/* (ROMBAK) KOMPONEN UI PELANGGAN */
 /* =================================== */
 .search-bar {
     width: 100%;
@@ -878,4 +872,48 @@ input:checked + .slider:before {
     border: 1.5px solid var(--primary-color);
     padding: 8px 12px;
     border-radius: 8px;
+}
+
+/* (BARU) KARTU LOG RIWAYAT DI LAPORAN */
+.history-log-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    margin-bottom: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.history-log-card .icon-log {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-light);
+    color: var(--success);
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+.history-log-card .log-info {
+    flex-grow: 1;
+}
+.history-log-card .log-info h5 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dark-text);
+}
+.history-log-card .log-info p {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--light-text);
+    margin: 2px 0 0 0;
+}
+.history-log-card .log-amount {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dark-text);
 }
