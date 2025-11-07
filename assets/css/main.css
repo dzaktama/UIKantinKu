@@ -170,18 +170,17 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     border: 1px solid var(--border-color);
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     overflow: hidden;
 }
 .order-card-header {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border-color);
+    padding: 16px 16px 12px 16px; /* Tambah padding atas bawah */
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 .order-card-header h4 {
-    font-size: 16px;
+    font-size: 18px; /* Lebih besar */
     font-weight: 700;
 }
 .order-card-header .status-badge {
@@ -200,8 +199,37 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
 .order-card-header .status-success {
     background: var(--success);
 }
+
+/* --- (ROMBAK TOTAL) ORDER CARD META --- */
+.order-card-meta {
+    padding: 0px 16px 12px 16px; 
+    border-bottom: 1px dashed var(--border-color);
+    margin-bottom: 12px;
+    
+    display: flex; /* (BARU) */
+    flex-direction: column; /* (BARU) Blok jadi vertikal */
+    gap: 6px; /* (BARU) Jarak antar baris meta */
+
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--light-text);
+}
+.order-card-meta .meta-row { /* (BARU) Wrapper untuk flex */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.order-card-meta .order-card-timer {
+    color: var(--dark-text); 
+    font-weight: 700;
+}
+.order-card-meta .order-card-timer i {
+    margin-right: 4px; 
+}
+/* --- AKHIR ROMBAK --- */
+
 .order-card-body {
-    padding: 16px;
+    padding: 0px 16px 12px 16px;
     font-size: 14px;
     line-height: 1.5;
 }
@@ -210,9 +238,31 @@ h1, h2, h3, h4, h5, h6 { text-align: left; color: #1A1A1A; margin: 0; }
     color: var(--light-text);
 }
 .order-card-body .items {
-    font-weight: 500;
+    font-weight: 600;
     color: var(--dark-text);
     margin-bottom: 4px;
+    font-size: 15px;
+}
+.order-card-body .total-amount {
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-top: 8px;
+    font-size: 16px;
+}
+.order-card-notes {
+    background: #fff8e1;
+    color: #663c00;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 16px 16px 16px; /* (DIUBAH) Margin atas/bawah */
+    border-radius: 8px; /* (BARU) */
+}
+.order-card-notes i {
+    color: #cc9900;
 }
 .order-card-footer {
     padding: 12px 16px;
@@ -455,9 +505,8 @@ input:checked + .slider:before {
 }
 
 /* =================================== */
-/* (ROMBAK) KOMPONEN UI PELANGGAN */
+/* KOMPONEN UI PELANGGAN */
 /* =================================== */
-
 .search-bar {
     width: 100%;
     padding: 14px 16px;
@@ -616,17 +665,13 @@ input:checked + .slider:before {
     font-size: 16px;
     font-weight: 700;
 }
-
-/* --- (ROMBAK TOTAL) Tracker Status Pesanan Pelanggan --- */
-/* Menghapus .order-status-card dan .hero-status-card lama */
-
 .unified-order-card {
     background: #fff;
     border-radius: 16px;
     border: 1px solid var(--border-color);
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     margin-bottom: 20px;
-    overflow: hidden; /* Penting */
+    overflow: hidden;
 }
 .unified-header {
     padding: 16px 20px;
@@ -650,7 +695,6 @@ input:checked + .slider:before {
     color: var(--primary-color);
     cursor: pointer;
 }
-
 .unified-body {
     padding: 24px 20px;
     border-bottom: 1px solid var(--border-color);
@@ -672,7 +716,6 @@ input:checked + .slider:before {
     margin: 4px 0 0 0;
     text-align: center;
 }
-
 .rich-tracker {
     list-style: none;
     padding: 0 0 0 20px;
@@ -720,7 +763,7 @@ input:checked + .slider:before {
 }
 .rich-tracker li.completed::before {
     background: var(--success);
-    content: '\f00c'; /* Check icon */
+    content: '\f00c';
 }
 .rich-tracker li.completed::after {
     background: var(--success);
@@ -731,7 +774,7 @@ input:checked + .slider:before {
 }
 .rich-tracker li.active::before {
     background: var(--primary-color);
-    content: '\f252'; /* Hourglass icon */
+    content: '\f252';
     animation: spin 1.5s linear infinite;
 }
 .rich-tracker li.active::after {
@@ -741,7 +784,7 @@ input:checked + .slider:before {
     padding-bottom: 0;
 }
 .rich-tracker li:last-child::before {
-    content: '\f007'; /* User icon */
+    content: '\f007';
 }
 .rich-tracker li.active:last-child::before {
     content: '\f007';
@@ -761,7 +804,6 @@ input:checked + .slider:before {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
 .order-item-list {
     padding: 16px 20px;
     border-bottom: 1px solid var(--border-color);
@@ -793,7 +835,6 @@ input:checked + .slider:before {
     font-size: 14px;
     font-weight: 600;
 }
-
 .order-summary-block {
     padding: 16px 20px;
     background: #fdfdfd;
@@ -816,7 +857,6 @@ input:checked + .slider:before {
     padding-top: 12px;
     border-top: 1px dashed #ccc;
 }
-
 .unified-footer {
     padding: 16px 20px;
     background: #fdfdfd;

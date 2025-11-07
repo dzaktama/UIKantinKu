@@ -19,10 +19,9 @@
             <a href="javascript:void(0)" class="tab-item" onclick="showTab(event, 'riwayat')">Riwayat</a>
         </div>
         
-        <div class="content" style="padding-top: 0;">
+        <div class="content">
             
             <div id="aktif" class="content-block">
-                
                 <div class="unified-order-card">
                     <div class="unified-header">
                         <div class="info">
@@ -92,24 +91,79 @@
                         <a href="#" class="help-button">Butuh Bantuan?</a>
                     </div>
                 </div>
-
             </div>
             
             <div id="riwayat" class="content-block hidden">
+                
                 <div class="order-card">
                     <div class="order-card-header">
                         <h4>Kantin Dzaky</h4>
                         <span class="status-badge status-success">SELESAI</span>
                     </div>
                     <div class="order-card-body">
-                        <p class="items">1x Mie Ayam Bakso</p>
-                        <p>Total: Rp 15.000</p>
+                        <p style="font-weight: 500; color: var(--light-text); margin-bottom: 8px;">
+                            <i class="fas fa-calendar-alt"></i> 07 Nov 2025, 10:35
+                        </p>
+                        <p class="items">1 items: Mie Ayam Bakso</p>
                     </div>
-                    <div class="order-card-footer">
-                        <a href="#" class="button secondary">Pesan Lagi</a>
-                        <a href="#" class="button">Beri Rating</a>
+                    <div class="order-card-footer" style="justify-content: space-between; align-items: center;">
+                        <div>
+                            <p style="font-size: 12px; color: var(--light-text); margin: 0;">Total</p>
+                            <h4 style="font-size: 16px;">Rp 15.000</h4>
+                        </div>
+                        <div style="display: flex; gap: 10px; width: 60%;">
+                            <a href="#" class="button secondary">Pesan Lagi</a>
+                            <a href="#" class="button">Beri Rating</a>
+                        </div>
                     </div>
                 </div>
+                
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <h4>Kantin Bu Martin</h4>
+                        <span class="status-badge status-success">SELESAI</span>
+                    </div>
+                    <div class="order-card-body">
+                        <p style="font-weight: 500; color: var(--light-text); margin-bottom: 8px;">
+                            <i class="fas fa-calendar-alt"></i> 06 Nov 2025, 12:05
+                        </p>
+                        <p class="items">2 items: Nasi Rames Ayam, Es Teh Manis</p>
+                    </div>
+                    <div class="order-card-footer" style="justify-content: space-between; align-items: center;">
+                        <div>
+                            <p style="font-size: 12px; color: var(--light-text); margin: 0;">Total</p>
+                            <h4 style="font-size: 16px;">Rp 16.000</h4>
+                        </div>
+                        <div style="display: flex; gap: 10px; width: 60%;">
+                            <a href="#" class="button secondary">Pesan Lagi</a>
+                            <a href="#" class="button">Beri Rating</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <h4>Kantin Ardan</h4>
+                        <span class="status-badge status-success">SELESAI</span>
+                    </div>
+                    <div class="order-card-body">
+                        <p style="font-weight: 500; color: var(--light-text); margin-bottom: 8px;">
+                            <i class="fas fa-calendar-alt"></i> 05 Nov 2025, 14:30
+                        </p>
+                        <p class="items">1 items: Jus Alpukat</p>
+                    </div>
+                    <div class="order-card-footer" style="justify-content: space-between; align-items: center;">
+                        <div>
+                            <p style="font-size: 12px; color: var(--light-text); margin: 0;">Total</p>
+                            <h4 style="font-size: 16px;">Rp 8.000</h4>
+                        </div>
+                        <div style="display: flex; gap: 10px; width: 60%;">
+                            <a href="#" class="button secondary">Pesan Lagi</a>
+                            <a href="#" class="button">Beri Rating</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
         
@@ -130,7 +184,6 @@
     </div>
 
     <script>
-        // Fungsi untuk Tab Aktif/Riwayat
         function showTab(event, tabId) {
             var contentBlocks = document.querySelectorAll('.content-block');
             contentBlocks.forEach(function(block) {
@@ -146,7 +199,6 @@
             event.currentTarget.classList.add('active');
         }
 
-        // Fungsi untuk Toggle 'Lihat Detail Pesanan'
         function toggleDetails(button) {
             var details = document.getElementById('orderDetails');
             if (details.classList.contains('hidden')) {
