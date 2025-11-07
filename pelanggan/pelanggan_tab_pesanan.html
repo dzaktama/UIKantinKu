@@ -8,65 +8,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 
     <style>
-        /* 1. Kurangi padding utama area content */
-        .content {
-            padding-top: 16px;
-            padding-bottom: 16px;
-        }
-
-        /* 2. Targetkan khusus card di tab #aktif */
-        #aktif .unified-order-card {
-            margin-bottom: 0; /* Hapus margin bawah card */
-        }
-        
-        /* 3. Kurangi padding & font header card */
-        #aktif .unified-header {
-            padding: 12px 20px;
-        }
-        #aktif .unified-header .info h4 {
-            font-size: 17px; /* Sedikit lebih kecil dari 18px */
-        }
-        #aktif .unified-header .info p {
-            font-size: 13px; /* Sedikit lebih kecil dari 14px */
-        }
-        
-        /* 4. Kurangi padding badan card (tracker) */
-        #aktif .unified-body {
-            padding: 18px 20px; /* Berkurang dari 24px */
-        }
-
-        /* 5. Kurangi margin bawah & font size blok estimasi */
-        #aktif .estimasi-block {
-            margin-bottom: 18px; /* Berkurang dari 24px */
-        }
-        #aktif .estimasi-block h2 {
-            font-size: 30px; /* Sedikit lebih kecil dari 32px */
-        }
-
-        /* 6. Rapatkan item & kecilkan font di tracker */
-        #aktif .rich-tracker li {
-            padding-bottom: 20px; /* Berkurang dari 24px */
-            font-size: 13.5px; /* Sedikit lebih kecil dari 14px */
-        }
-        #aktif .rich-tracker li strong {
-            font-weight: 700;
-        }
-        #aktif .rich-tracker li span {
-            font-size: 11.5px; /* Sedikit lebih kecil dari 12px */
-            margin-top: 1px;
-        }
-
-        /* 7. Kurangi padding & font footer card */
-        #aktif .unified-footer {
-            padding: 12px 20px; /* Berkurang dari 16px */
-        }
-        #aktif .unified-footer p {
-            font-size: 11px; /* Sedikit lebih kecil dari 12px */
-        }
-        #aktif .unified-footer .help-button {
-            font-size: 13px; /* Sedikit lebih kecil dari 14px */
-            padding: 6px 10px; /* Berkurang dari 8px 12px */
-        }
+        .content { padding-top: 16px; padding-bottom: 16px; }
+        #aktif .unified-order-card { margin-bottom: 0; }
+        #aktif .unified-header { padding: 12px 20px; }
+        #aktif .unified-header .info h4 { font-size: 17px; }
+        #aktif .unified-header .info p { font-size: 13px; }
+        #aktif .unified-body { padding: 18px 20px; }
+        #aktif .estimasi-block { margin-bottom: 18px; }
+        #aktif .estimasi-block h2 { font-size: 30px; }
+        #aktif .rich-tracker li { padding-bottom: 20px; font-size: 13.5px; }
+        #aktif .rich-tracker li strong { font-weight: 700; }
+        #aktif .rich-tracker li span { font-size: 11.5px; margin-top: 1px; }
+        #aktif .unified-footer { padding: 12px 20px; }
+        #aktif .unified-footer p { font-size: 11px; }
+        #aktif .unified-footer .help-button { font-size: 13px; padding: 6px 10px; }
     </style>
 </head>
 <body>
@@ -77,8 +32,8 @@
         </div>
         
         <div class="tab-container">
-            <a href="javascript:void(0)" class="tab-item active" onclick="showTab(event, 'aktif')">Pesanan Aktif</a>
-            <a href="javascript:void(0)" class="tab-item" onclick="showTab(event, 'riwayat')">Riwayat</a>
+            <a href="javascript:void(0)" class="tab-item active" onclick="showTab(event, 'aktif')" id="tab-aktif">Pesanan Aktif</a>
+            <a href="javascript:void(0)" class="tab-item" onclick="showTab(event, 'riwayat')" id="tab-riwayat">Riwayat</a>
         </div>
         
         <div class="content">
@@ -152,7 +107,7 @@
                     </div>
                 </div>
                 
-                <div classs="order-card">
+                <div class="order-card">
                     <div class="order-card-header">
                         <h4>Kantin Bu Martin</h4>
                         <span class="status-badge status-success">SELESAI</span>
@@ -230,7 +185,14 @@
             });
 
             document.getElementById(tabId).classList.remove('hidden');
-            event.currentTarget.classList.add('active');
+            
+            // Cek jika event berasal dari klik (bukan null)
+            if (event) {
+                event.currentTarget.classList.add('active');
+            } else {
+                // Jika event null (dipanggil oleh script), cari tab berdasarkan tabId
+                document.getElementById('tab-' + tabId).classList.add('active');
+            }
         }
 
         function toggleDetails(button) {
@@ -243,6 +205,19 @@
                 button.textContent = 'Lihat';
             }
         }
+
+        /*
+            MODIFIKASI BARU:
+            Script ini mengecek hash di URL saat halaman dimuat.
+            Jika URL-nya adalah "....html#riwayat",
+            maka akan otomatis mengklik tab Riwayat.
+        */
+        window.onload = function() {
+            if (window.location.hash === '#riwayat') {
+                // Panggil showTab tanpa event (null) dan dengan ID 'riwayat'
+                showTab(null, 'riwayat');
+            }
+        };
     </script>
 </body>
 </html>
