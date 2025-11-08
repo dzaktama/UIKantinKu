@@ -161,6 +161,22 @@
             color: var(--primary-color);
             border-color: var(--primary-color);
         }
+        
+        /* MODIFIKASI BARU: 
+            Membuat jarak antar blok ringkasan
+        */
+        .summary-block {
+            padding-top: 16px; /* Hapus padding 0 */
+            margin-top: 0; /* Hapus margin 20px */
+            border-top: 10px solid var(--bg-light); /* Beri pemisah abu-abu */
+        }
+        .summary-block:first-of-type {
+            border-top: none;
+        }
+        .summary-block .summary-row span:last-child {
+            font-weight: 700; /* Dibuat tebal agar konsisten */
+        }
+
     </style>
 </head>
 <body>
@@ -238,7 +254,20 @@
                 <span class="action" id="payment-summary-status">QRIS &gt;</span>
             </a>
 
-            <div class="summary-block" style="margin-top: 20px;">
+            <div class="summary-block" style="margin-top: 0;">
+                <h3 class="section-title" style="margin-top: 0;">Rincian Pengambilan</h3>
+                <div class="summary-row">
+                    <span>Lokasi</span>
+                    <span>Kantin Bu Martin</span>
+                </div>
+                <div class="summary-row">
+                    <span>Waktu Pengambilan</span>
+                    <span id="summary-pickup-time">Segera</span>
+                </div>
+            </div>
+
+
+            <div class="summary-block">
                 <h3 class="section-title" style="margin-top: 0;">Ringkasan Pembayaran</h3>
                 <div class="summary-row">
                     <span>Subtotal Makanan (2 item)</span>
@@ -464,9 +493,7 @@
             closePaymentModal();
         }
         
-        /* MODIFIKASI JAVASCRIPT: 
-            Fungsi untuk menggerakkan slider + render slot
-        */
+        // --- Fungsi Toggle & Modal Waktu ---
         function selectPickupMode(mode, element) {
             const slider = document.querySelector('.toggle-slider');
             slider.style.left = element.offsetLeft + 'px';
@@ -483,10 +510,11 @@
             } else if (mode === 'jadwal') {
                 openTimeModal(); 
             }
+            updateSummaryDisplay(); // MODIFIKASI: Panggil update ringkasan
         }
         
         function openTimeModal() {
-            renderTimeSlots(); // Panggil fungsi render
+            renderTimeSlots(); 
             timeModal.style.display = 'block';
             setTimeout(() => timeModal.classList.add('show'), 10);
         }
@@ -514,65 +542,61 @@
                 return;
             }
             document.getElementById('mode-jadwal').innerHTML = `<i class="fas fa-clock"></i> ${selectedTime}`;
+            updateSummaryDisplay(); // MODIFIKASI: Panggil update ringkasan
             alert(`Waktu pickup diatur ke: ${selectedTime}`);
             closeTimeModal();
         }
         
-        // FUNGSI BARU: Untuk me-render slot waktu
         function renderTimeSlots() {
             const container = document.getElementById('time-slot-container');
-            container.innerHTML = ''; // Kosongkan dulu
+            container.innerHTML = ''; 
             
-            // --- Simulasi Waktu ---
             const simNow = new Date();
-            simNow.setHours(10, 30, 0); // Anggap sekarang jam 10:30
-            const prepBufferMinutes = 30; // 30 menit persiapan
-            const slotIncrementMinutes = 15; // Slot 15 menitan
+            simNow.setHours(7, 30, 0); 
+            const prepBufferMinutes = 30; 
+            const slotIncrementMinutes = 15; 
             const closingTimeHours = 16;
-            // ------------------------
-
-            // Fungsi helper untuk membulatkan ke 15 menit berikutnya
+            
             function roundUpToNearest(minutes) {
                 return Math.ceil(minutes / slotIncrementMinutes) * slotIncrementMinutes;
             }
-            
-            // Fungsi helper format jam: 5 -> "05"
             function pad(n) {
                 return n < 10 ? '0' + n : n;
             }
 
-            // Hitung slot pertama
             let firstSlot = new Date(simNow.getTime() + prepBufferMinutes * 60000);
             let firstMinutes = roundUpToNearest(firstSlot.getMinutes());
-            firstSlot.setMinutes(firstMinutes);
+            firstSlot.setMinutes(firstMinutes, 0, 0); 
+            
+            let openingTime = new Date(simNow);
+            openingTime.setHours(8, 0, 0); 
+            
+            if (firstSlot < openingTime) {
+                firstSlot = openingTime;
+            }
 
             let closingTime = new Date(simNow);
             closingTime.setHours(closingTimeHours, 0, 0);
 
-            // Loop untuk membuat slot
-            let currentSlotTime = firstSlot;
+            let currentSlotTime = new Date(firstSlot.getTime()); 
             while(currentSlotTime < closingTime) {
                 let slotEnd = new Date(currentSlotTime.getTime() + slotIncrementMinutes * 60000);
                 
-                // Format string: "11:00 - 11:15"
                 let startTimeStr = `${pad(currentSlotTime.getHours())}:${pad(currentSlotTime.getMinutes())}`;
                 let endTimeStr = `${pad(slotEnd.getHours())}:${pad(slotEnd.getMinutes())}`;
                 let timeString = `${startTimeStr} - ${endTimeStr}`;
 
-                // Buat elemen div
                 let slotDiv = document.createElement('div');
                 slotDiv.className = 'time-slot';
                 slotDiv.innerText = timeString;
                 slotDiv.setAttribute('onclick', `selectTime('${timeString}', this)`);
 
-                // Tandai jika ini adalah slot yang sudah dipilih
                 if (selectedTime === timeString) {
                     slotDiv.classList.add('active');
                 }
                 
                 container.appendChild(slotDiv);
                 
-                // Maju ke slot berikutnya
                 currentSlotTime.setMinutes(currentSlotTime.getMinutes() + slotIncrementMinutes);
             }
         }
@@ -593,10 +617,21 @@
             document.getElementById('total-payment-bottom').innerText = formattedTotal;
         }
 
+        // --- FUNGSI BARU: Update Rincian Pengambilan ---
+        function updateSummaryDisplay() {
+            const timeSpan = document.getElementById('summary-pickup-time');
+            if (currentPickupMode === 'langsung' || !selectedTime) {
+                timeSpan.innerText = 'Segera';
+            } else {
+                timeSpan.innerText = selectedTime;
+            }
+        }
+
         // Inisialisasi tampilan
         document.addEventListener('DOMContentLoaded', () => {
             saveGlobalNotes(); 
-            updateTotal();     
+            updateTotal();
+            updateSummaryDisplay(); // Panggil saat memuat
             
             const paymentStatus = document.getElementById('payment-summary-status');
             paymentStatus.innerText = `${selectedPayment} >`;

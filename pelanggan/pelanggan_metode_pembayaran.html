@@ -6,28 +6,541 @@
     <title>Metode Pembayaran - KantinKu</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <style>
+        .content { 
+            padding: 0; 
+            animation: slideInFromRight 0.4s ease-out forwards;
+        }
+        @keyframes slideInFromRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* 1. Header Saldo */
+        .saldo-container {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 24px 24px;
+        }
+        .saldo-container p {
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0;
+            opacity: 0.9;
+        }
+        .saldo-container h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: white;
+            text-align: left;
+            margin: 4px 0 16px 0;
+            transition: all 0.3s ease; /* Animasi saat saldo berubah */
+        }
+        .payment-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        .action-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 0;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            cursor: pointer;
+        }
+        .action-button i { font-size: 20px; }
+
+        /* 2. Daftar Metode Lain */
+        .payment-list-section {
+            padding: 20px;
+        }
+        
+        /* 3. CSS MODAL (UMUM) */
+        .modal-overlay {
+            display: none; position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+            left: 50%; transform: translateX(-50%);
+            max-width: 375px; 
+        }
+        .modal-content {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            background: #f0f2f5;
+            border-radius: 20px 20px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+        .modal-header {
+            padding: 16px 20px;
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+        .modal-header h3 {
+            font-size: 16px; font-weight: 700;
+            text-align: center; margin: 0;
+        }
+        .modal-close-button {
+            position: absolute; top: 12px; left: 16px;
+            font-size: 24px; color: #888; cursor: pointer; text-decoration: none;
+        }
+        .modal-body { padding: 20px; background: #fff; }
+
+        /* 4. CSS Modal Isi Saldo */
+        .nominal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .nominal-button {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark-text);
+            text-align: center;
+            cursor: pointer;
+        }
+        .nominal-button.active {
+            border-color: var(--primary-color);
+            background-color: #e4f5e9;
+            color: var(--primary-color);
+        }
+        .form-input-group { position: relative; }
+        .form-input-group .prefix {
+            position: absolute;
+            left: 14px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+        .form-input-group .form-input {
+            padding-left: 45px;
+            font-weight: 700;
+        }
+        
+        /* 5. CSS Modal Instruksi */
+        .instruction-box {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .instruction-box p {
+            font-size: 14px; font-weight: 500;
+            color: var(--light-text); margin: 0 0 4px 0;
+        }
+        .instruction-box h2 {
+            font-size: 24px; font-weight: 700;
+            text-align: left; letter-spacing: 0.5px;
+        }
+        .instruction-box .va-number {
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .instruction-box .va-number a {
+            font-size: 13px; font-weight: 700;
+            color: var(--primary-color); text-decoration: none;
+        }
+        .instruction-steps h4 {
+            font-size: 16px; font-weight: 700; margin-bottom: 12px;
+        }
+        .instruction-steps ol {
+            padding-left: 20px; font-size: 14px;
+            color: var(--light-text); line-height: 1.6;
+        }
+        .instruction-steps ol li { margin-bottom: 8px; }
+        
+        /* 6. CSS Modal Riwayat Saldo (BARU) */
+        .saldo-history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .saldo-history-item:last-child { border-bottom: none; }
+        .history-info h5 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .history-info p {
+            font-size: 13px;
+            color: var(--light-text);
+            margin: 4px 0 0 0;
+        }
+        .history-amount {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .history-amount.credit { color: var(--success); }
+        .history-amount.debit { color: var(--dark-text); }
+        
+    </style>
 </head>
 <body>
     <div class="mobile-screen">
         <div class="header">
             <a href="pelanggan_tab_profil.html" class="back-button">&lt;</a>
-            Metode Pembayaran
+            Pembayaran
         </div>
         
-        <div class="content" style="background-color: #f0f2f5;">
-            <h3 class="section-title" style="margin-top: 0;">Saldo & E-Wallet</h3>
+        <div class="content">
             
-            <a href="#" class="profile-list-item" style="border-radius: 12px 12px 0 0; border: 1px solid var(--border-color); box-shadow: none;">
-                <i class="fas fa-wallet icon" style="color: var(--primary-color);"></i>
-                <span>E-Wallet (Tertaut)</span>
-                <span style="font-size: 14px; font-weight: 700; color: var(--dark-text);">Rp 50.000</span>
-            </a>
-            <a href="#" class="profile-list-item" style="border-radius: 0 0 12px 12px; border: 1px solid var(--border-color); border-top: none; box-shadow: none;">
-                <i class="fas fa-plus-circle icon"></i>
-                <span>Tambah Metode Lain</span>
-                <i class="fas fa-chevron-right chevron"></i>
-            </a>
+            <div class="saldo-container">
+                <p>Saldo KantinKu</p>
+                <h2 id="current-balance">Rp 50.000</h2>
+                <div class="payment-actions">
+                    <a class="action-button" onclick="openIsiSaldoModal()">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Isi Saldo</span>
+                    </a>
+                    <a class="action-button" onclick="openRiwayatModal()">
+                        <i class="fas fa-history"></i>
+                        <span>Riwayat</span>
+                    </a>
+                    <a href="#" class="action-button">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Bantuan</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="payment-list-section">
+                <h3 class="section-title" style="margin-top: 0;">Metode Pembayaran Lain</h3>
+                <div class="profile-list-group" style="box-shadow: none;">
+                    <a href="javascript:void(0)" class="profile-list-item" style="border-radius: 12px 12px 0 0;" onclick="openEwalletModal()">
+                        <i class="fas fa-wallet icon"></i>
+                        <span>E-Wallet (Tertaut)</span>
+                        <i class="fas fa-chevron-right chevron"></i>
+                    </a>
+                    <a href="javascript:void(0)" class="profile-list-item" style="border-radius: 0 0 12px 12px; border-top: none;" onclick="openTambahMetodeModal()">
+                        <i class="fas fa-plus-circle icon"></i>
+                        <span>Tambah Metode Lain</span>
+                        <i class="fas fa-chevron-right chevron"></i>
+                    </a>
+                </div>
+            </div>
+            
         </div>
     </div>
+    
+    <div class="modal-overlay" id="isiSaldoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Isi Saldo</h3>
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closeIsiSaldoModal()">&times;</a>
+            </div>
+            <div class="modal-body" style="background-color: #fff;">
+                <div class="form-container">
+                    <h3 class="section-title" style="margin-top: 0;">Pilih Nominal Isi Saldo</h3>
+                    
+                    <div class="nominal-grid">
+                        <div class="nominal-button" onclick="selectNominal(20000, this)">Rp 20.000</div>
+                        <div class="nominal-button" onclick="selectNominal(50000, this)">Rp 50.000</div>
+                        <div class="nominal-button" onclick="selectNominal(100000, this)">Rp 100.000</div>
+                        <div class="nominal-button" onclick="selectNominal(200000, this)">Rp 200.000</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nominal_lain">Atau masukkan nominal lain</label>
+                        <div class="form-input-group">
+                            <span class="prefix">Rp</span>
+                            <input type="number" id="nominal_lain" class="form-input" placeholder="0" onkeyup="clearActiveNominal()">
+                        </div>
+                    </div>
+                    
+                    <div style="height: 10px; background-color: var(--bg-light); margin: 24px -20px;"></div>
+                    
+                    <h3 class="section-title">Metode Pembayaran</h3>
+                    <div class="radio-list-item">
+                        <input type="radio" id="metode_va" name="metode_topup" value="va" checked>
+                        <label for="metode_va"><i class="fas fa-university" style="color: #666; margin-right: 8px;"></i> Virtual Account BCA</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="metode_alfamart" name="metode_topup" value="alfamart">
+                        <label for="metode_alfamart"><i class="fas fa-store" style="color: var(--danger); margin-right: 8px;"></i> Alfamart/Indomaret</label>
+                    </div>
+                </div>
+            </div>
+            <div class="sticky-button-container">
+                <a href="javascript:void(0)" onclick="confirmTopUp()" class="button">Isi Saldo Sekarang</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="instruksiModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Instruksi Pembayaran</h3>
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closeInstruksiModal()">&times;</a>
+            </div>
+            <div class="modal-body" style="background-color: #fff;">
+                <div class="instruction-box">
+                    <p>Metode Pembayaran</p>
+                    <h4 id="instruksi-metode">Virtual Account BCA</h4>
+                </div>
+                
+                <div class="instruction-box">
+                    <p>Nomor Virtual Account</p>
+                    <div class="va-number">
+                        <h2 id="va-number">8077 08123456789</h2>
+                        <a href="javascript:void(0)" onclick="copyVA()">SALIN</a>
+                    </div>
+                </div>
+                
+                <div class="instruction-box">
+                    <p>Total Pembayaran</p>
+                    <h2 id="total-topup">Rp 0</h2>
+                </div>
+                
+                <div class="instruction-steps" id="instruksi-va">
+                    <h4>Cara Pembayaran</h4>
+                    <ol>
+                        <li>Buka aplikasi m-BCA Anda.</li>
+                        <li>Pilih "m-Transfer" > "BCA Virtual Account".</li>
+                        <li>Masukkan Nomor Virtual Account di atas dan klik "Send".</li>
+                        <li>Periksa detail pembayaran Anda dan masukkan PIN m-BCA.</li>
+                        <li>Pembayaran selesai. Saldo akan otomatis diperbarui.</li>
+                    </ol>
+                </div>
+                
+                <div class="instruction-steps" id="instruksi-alfamart" style="display: none;">
+                    <h4>Cara Pembayaran</h4>
+                    <ol>
+                        <li>Pergi ke Alfamart/Indomaret terdekat.</li>
+                        <li>Beritahu kasir untuk "Isi Saldo KantinKu".</li>
+                        <li>Tunjukkan nomor HP Anda (08123456789).</li>
+                        <li>Bayar sesuai nominal Top Up.</li>
+                        <li>Pembayaran selesai. Saldo akan otomatis diperbarui.</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="sticky-button-container">
+                <a href="javascript:void(0)" class="button" onclick="closeInstruksiModal()">Selesai</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="riwayatModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Riwayat Saldo</h3>
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closeRiwayatModal()">&times;</a>
+            </div>
+            <div class="modal-body">
+                <div class="saldo-history-item">
+                    <div class="history-info">
+                        <h5>Isi Saldo (VA BCA)</h5>
+                        <p>07 Nov 2025, 10:30</p>
+                    </div>
+                    <span class="history-amount credit">+ Rp 50.000</span>
+                </div>
+                <div class="saldo-history-item">
+                    <div class="history-info">
+                        <h5>Bayar Pesanan (Kantin Bu Martin)</h5>
+                        <p>06 Nov 2025, 12:05</p>
+                    </div>
+                    <span class="history-amount debit">- Rp 16.000</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="ewalletModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>E-Wallet Tertaut</h3>
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closeEwalletModal()">&times;</a>
+            </div>
+            <div class="modal-body" style="padding-top: 0;">
+                <div class="profile-list-item" style="border-top: none;">
+                    <i class="fas fa-wallet icon" style="color: var(--info);"></i>
+                    <span>OVO (0812***5678)</span>
+                    <span style="font-size: 13px; font-weight: 500;">Aktif</span>
+                </div>
+            </div>
+            <div class="sticky-button-container">
+                <a href="javascript:void(0)" class="button danger" onclick="closeEwalletModal()">Hapus Tautan</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="tambahMetodeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tambah Metode Lain</h3>
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closeTambahMetodeModal()">&times;</a>
+            </div>
+            <div class="modal-body" style="padding-top: 0;">
+                <a href="#" class="profile-list-item" style="border-top: none;">
+                    <i class="fas fa-wallet icon" style="color: #4F2173;"></i>
+                    <span>GoPay</span>
+                    <i class="fas fa-chevron-right chevron"></i>
+                </a>
+                <a href="#" class="profile-list-item">
+                    <i class="fas fa-wallet icon" style="color: #EC682B;"></i>
+                    <span>ShopeePay</span>
+                    <i class="fas fa-chevron-right chevron"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Variabel Modal
+        const isiSaldoModal = document.getElementById('isiSaldoModal');
+        const instruksiModal = document.getElementById('instruksiModal');
+        const riwayatModal = document.getElementById('riwayatModal');
+        const ewalletModal = document.getElementById('ewalletModal');
+        const tambahMetodeModal = document.getElementById('tambahMetodeModal');
+        
+        let selectedAmount = 0;
+        let finalAmount = 0;
+        let currentBalance = 50000; // Saldo awal
+
+        // --- Helper Fungsi ---
+        function formatCurrency(num) {
+            return "Rp " + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+        function parseCurrency(str) {
+            return parseInt(str.replace(/Rp /g, '').replace(/\./g, ''));
+        }
+
+        // --- Kontrol Modal 1 (Isi Saldo) ---
+        function openIsiSaldoModal() {
+            selectedAmount = 0;
+            document.getElementById('nominal_lain').value = '';
+            clearActiveNominal();
+            isiSaldoModal.style.display = 'block';
+            setTimeout(() => isiSaldoModal.classList.add('show'), 10);
+        }
+        function closeIsiSaldoModal() {
+            isiSaldoModal.classList.remove('show');
+            setTimeout(() => isiSaldoModal.style.display = 'none', 300);
+        }
+        function clearActiveNominal() {
+            document.querySelectorAll('.nominal-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            selectedAmount = 0;
+        }
+        function selectNominal(amount, element) {
+            clearActiveNominal();
+            element.classList.add('active');
+            document.getElementById('nominal_lain').value = amount;
+            selectedAmount = amount;
+        }
+        
+        // --- Fungsi Transisi ---
+        function confirmTopUp() {
+            const inputAmount = document.getElementById('nominal_lain').value;
+            finalAmount = inputAmount || selectedAmount; 
+            
+            if (finalAmount <= 0) {
+                alert('Silakan pilih atau masukkan nominal terlebih dahulu.');
+                return;
+            }
+            
+            closeIsiSaldoModal();
+            setTimeout(() => {
+                openInstruksiModal();
+            }, 350);
+        }
+
+        // --- Kontrol Modal 2 (Instruksi) ---
+        function openInstruksiModal() {
+            // Update total
+            document.getElementById('total-topup').innerText = formatCurrency(finalAmount);
+            
+            // Cek metode mana yang dipilih
+            const metode = document.querySelector('input[name="metode_topup"]:checked').value;
+            if (metode === 'va') {
+                document.getElementById('instruksi-metode').innerText = 'Virtual Account BCA';
+                document.getElementById('instruksi-va').style.display = 'block';
+                document.getElementById('instruksi-alfamart').style.display = 'none';
+            } else if (metode === 'alfamart') {
+                document.getElementById('instruksi-metode').innerText = 'Alfamart/Indomaret';
+                document.getElementById('instruksi-va').style.display = 'none';
+                document.getElementById('instruksi-alfamart').style.display = 'block';
+            }
+
+            instruksiModal.style.display = 'block';
+            setTimeout(() => instruksiModal.classList.add('show'), 10);
+        }
+        
+        // MODIFIKASI: Fungsi ini sekarang menambah saldo
+        function closeInstruksiModal() {
+            instruksiModal.classList.remove('show');
+            setTimeout(() => {
+                instruksiModal.style.display = 'none';
+                
+                // Update Saldo (Simulasi)
+                currentBalance += parseInt(finalAmount);
+                document.getElementById('current-balance').innerText = formatCurrency(currentBalance);
+                alert('Isi saldo berhasil! Saldo Anda sekarang ' + formatCurrency(currentBalance));
+                finalAmount = 0; // Reset
+            }, 300);
+        }
+
+        function copyVA() {
+            const vaNumber = document.getElementById('va-number').innerText;
+            navigator.clipboard.writeText(vaNumber.replace(/ /g, ''));
+            alert('Nomor VA ' + vaNumber + ' telah disalin!');
+        }
+        
+        // --- Kontrol Modal 3 (Riwayat) ---
+        function openRiwayatModal() {
+            riwayatModal.style.display = 'block';
+            setTimeout(() => riwayatModal.classList.add('show'), 10);
+        }
+        function closeRiwayatModal() {
+            riwayatModal.classList.remove('show');
+            setTimeout(() => riwayatModal.style.display = 'none', 300);
+        }
+        
+        // --- Kontrol Modal 4 (E-Wallet) ---
+        function openEwalletModal() {
+            ewalletModal.style.display = 'block';
+            setTimeout(() => ewalletModal.classList.add('show'), 10);
+        }
+        function closeEwalletModal() {
+            ewalletModal.classList.remove('show');
+            setTimeout(() => ewalletModal.style.display = 'none', 300);
+        }
+        
+        // --- Kontrol Modal 5 (Tambah Metode) ---
+        function openTambahMetodeModal() {
+            tambahMetodeModal.style.display = 'block';
+            setTimeout(() => tambahMetodeModal.classList.add('show'), 10);
+        }
+        function closeTambahMetodeModal() {
+            tambahMetodeModal.classList.remove('show');
+            setTimeout(() => tambahMetodeModal.style.display = 'none', 300);
+        }
+    </script>
 </body>
 </html>

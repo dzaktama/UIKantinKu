@@ -6,62 +6,356 @@
     <title>Home - KantinKu</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    
+    <style>
+        /* MODIFIKASI: 
+            Content padding dikembalikan ke default
+            Animasi tetap ada
+        */
+        .content { 
+            padding: 20px; 
+            background-color: #fff;
+            animation: slideInFromRight 0.4s ease-out forwards;
+        }
+        @keyframes slideInFromRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* 1. CSS E-Wallet Header (DIKEMBALIKAN) */
+        .header-wallet-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-color);
+            padding: 16px 20px;
+            color: white;
+            /* Hapus margin 'nabrak' */
+        }
+        .header-wallet-container .user-info {
+            font-weight: 600;
+        }
+        .header-wallet-container .user-info h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+        }
+        .header-wallet-container .wallet-info {
+            text-align: right;
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+            color: white;
+        }
+        .header-wallet-container .wallet-info p {
+            font-size: 12px;
+            font-weight: 500;
+            margin: 0;
+            opacity: 0.8;
+        }
+        
+        /* 2. Kategori (Penyesuaian 5 kolom) */
+        .kategori-container {
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin: 20px 0 24px 0; 
+        }
+        .kategori-item .icon-bg {
+            width: 54px; height: 54px;
+            font-size: 22px;
+        }
+        .kategori-item span {
+            text-align: center;
+        }
+
+        /* 3. Kartu Kantin (Desain Ulang Rinci) */
+        
+        /* MODIFIKASI: Menambahkan position:relative untuk penanda tombol favorit */
+        .store-card {
+            position: relative; 
+        }
+
+        .store-card .store-image {
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+            background-color: #eee;
+        }
+        .store-info-details {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap; 
+            gap: 8px; 
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--light-text);
+            margin-top: 8px;
+        }
+        .store-info-details .rating {
+            color: var(--warning);
+            font-weight: 700;
+        }
+        .store-info-details .rating i {
+            font-size: 12px;
+        }
+        .store-info-details .status-badge,
+        .store-info-details .status-badge.closed {
+            color: var(--success); 
+            margin: 0;
+            font-size: 13px;
+        }
+        .store-info-details .status-badge.closed {
+            color: var(--danger);
+        }
+
+        /* 4. "Makan Apa Hari Ini?" (Horizontal Scroll) */
+        .food-carousel-container {
+            width: 100%;
+            overflow-x: auto; 
+            white-space: nowrap; 
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .food-carousel-container::-webkit-scrollbar {
+            display: none;
+        }
+        .food-suggestion-card {
+            display: inline-block; 
+            width: 130px; 
+            margin-right: 12px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-decoration: none;
+        }
+        .food-suggestion-card .food-image {
+            width: 100%;
+            height: 100px;
+            background-color: #eee;
+            background-size: cover;
+            background-position: center;
+        }
+        .food-suggestion-card .food-title {
+            padding: 8px 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dark-text);
+            white-space: normal; 
+        }
+        
+        /* 5. Location Switcher */
+        .location-switcher {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin: 0 0 16px 0; /* Ubah margin */
+            cursor: pointer;
+        }
+        .location-switcher i {
+            color: var(--primary-color);
+        }
+        .location-switcher p {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        .location-switcher p strong {
+            color: var(--primary-color);
+        }
+        
+        /* 6. CSS Modal Universitas */
+        .modal-overlay {
+            display: none; position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+            left: 50%; transform: translateX(-50%);
+            max-width: 375px; 
+        }
+        .modal-content {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            background: #f0f2f5;
+            border-radius: 20px 20px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+        .modal-header {
+            padding: 16px 20px;
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+        .modal-header h3 {
+            font-size: 16px; font-weight: 700;
+            text-align: center; margin: 0;
+        }
+        .modal-close-button {
+            position: absolute; top: 12px; left: 16px;
+            font-size: 24px; color: #888; cursor: pointer; text-decoration: none;
+        }
+        .modal-body { 
+            padding: 20px 20px 20px 20px; 
+        }
+        .modal-search-bar {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 15px;
+            border-radius: 10px;
+            border: 1.5px solid #ddd;
+            box-sizing: border-box; 
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 16px;
+        }
+        .modal-radio-list {
+            max-height: 300px; 
+            overflow-y: auto;
+            padding-right: 5px; 
+        }
+        .modal-body .radio-list-item {
+            background-color: #fff;
+        }
+
+        /* * =============================================
+         * === MODIFIKASI BARU: Tombol Favorit (Love) ===
+         * =============================================
+         */
+        .favorite-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            backdrop-filter: blur(2px);
+            z-index: 5; /* Di atas gambar */
+            transition: transform 0.2s ease;
+            cursor: pointer; /* Menjadi pointer karena <div> */
+        }
+        .favorite-button:active {
+            /* Animasi klik */
+            transform: scale(0.9);
+        }
+        .favorite-button i {
+            font-size: 18px;
+            color: var(--dark-text); /* Default: outline */
+        }
+        /* Style untuk ikon solid (saat sudah difavoritkan) */
+        .favorite-button i.fas.fa-heart {
+            color: var(--danger); /* Merah saat solid (favorit) */
+        }
+        
+    </style>
 </head>
 <body>
 
     <div class="mobile-screen">
-        <div class="header" style="justify-content: space-between; padding-bottom: 10px;">
-            <div style="text-align: left;">
-                <h3 style="font-size: 24px; font-weight: 800; color: var(--dark-text);">KantinKu</h3>
-                <p style="font-size: 14px; font-weight: 500; color: var(--light-text); margin: 0;">Halo, Budi!</p>
-            </div>
-            <div class="avatar" style="width: 44px; height: 44px; font-size: 20px; margin: 0;">👤</div>
-        </div>
         
-        <div class="content" style="background-color: #fff;">
+        <a href="pelanggan_metode_pembayaran.html" class="header-wallet-container" style="text-decoration: none;">
+            <div class="user-info">
+                <h3>Halo, Budi!</h3>
+            </div>
+            <div class="wallet-info">
+                <p>Saldo E-Wallet</p>
+                <span>Rp 50.000 &gt;</span>
+            </div>
+        </a>
+        
+        <div class="content">
             <input type="text" class="search-bar" placeholder="Cari makanan atau kantin...">
 
-            <div class="kategori-container">
-                <a href="#" class="kategori-item">
-                    <div class="icon-bg"><i class="fas fa-utensils"></i></div>
-                    <span>Semua</span>
-                </a>
-                <a href="#" class="kategori-item">
-                    <div class="icon-bg"><i class="fas fa-drumstick-bite"></i></div>
-                    <span>Nasi</span>
-                </a>
-                <a href="#" class="kategori-item">
-                    <div class="icon-bg"><i class="fas fa-glass-martini-alt"></i></div>
-                    <span>Minuman</span>
-                </a>
-                <a href="#" class="kategori-item">
-                    <div class="icon-bg"><i class="fas fa-cookie"></i></div>
-                    <span>Jajanan</span>
-                </a>
-                <a href="#" class="kategori-item">
-                    <div class="icon-bg"><i class="fas fa-heart"></i></div>
-                    <span>Favorit</span>
-                </a>
+            <div class="location-switcher" onclick="openLocationModal()">
+                <i class="fas fa-map-marker-alt"></i>
+                <p id="location-text">Lokasi: <strong>Universitas Gadjah Mada ></strong></p>
             </div>
+
+            <div class="kategori-container">
+                <a href="#" class="kategori-item"><div class="icon-bg"><i class="fas fa-utensils"></i></div><span>Semua</span></a>
+                <a href="#" class="kategori-item"><div class="icon-bg"><i class="fas fa-drumstick-bite"></i></div><span>Nasi</span></a>
+                <a href="#" class="kategori-item"><div class="icon-bg"><i class="fas fa-glass-martini-alt"></i></div><span>Minuman</span></a>
+                <a href="#" class="kategori-item"><div class="icon-bg"><i class="fas fa-cookie"></i></div><span>Jajanan</span></a>
+                <a href="pelanggan_favorit.html" class="kategori-item"><div class="icon-bg"><i class="fas fa-heart"></i></div><span>Favorit</span></a>
+            </div>
+            
+            <h3 class="section-title" style="margin-top: 0;">Makan Apa Hari Ini?</h3>
+            <div class="food-carousel-container">
+                <a href="#" class="food-suggestion-card"><div class="food-image" style="background-image: url('https://images.unsplash.com/photo-1587814213271-72900b21855c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80');"></div><div class="food-title">Nasi Goreng</div></a>
+                <a href="#" class="food-suggestion-card"><div class="food-image" style="background-image: url('https://images.unsplash.com/photo-1626725350516-1896020755b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80');"></div><div class="food-title">Mie Ayam</div></a>
+                <a href="#" class="food-suggestion-card"><div class="food-image" style="background-image: url('https://images.unsplash.com/photo-1626082896491-9602d5c0182E?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80');"></div><div class="food-title">Ayam Geprek</div></a>
+                <a href="#" class="food-suggestion-card"><div class="food-image" style="background-image: url('https://images.unsplash.com/photo-1563245763-8f81013233c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80');"></div><div class="food-title">Soto Ayam</div></a>
+            </div>
+
 
             <h3 class="section-title">Semua Kantin</h3>
             
-            <a href="pelanggan_detail_warung.html" class="store-card">
-                <div class="store-image"></div>
-                <div class="store-info">
-                    <h4>Kantin Bu Martin</h4>
-                    <p>Nasi, Soto, Gorengan</p>
-                    <p class="status-badge">Buka</p>
-                </div>
-            </a>
-            <a href="pelanggan_detail_warung.html" class="store-card">
-                <div class="store-image"></div>
-                <div class="store-info">
-                    <h4>Kantin Dzaky</h4>
-                    <p>Mie Ayam & Bakso</p>
-                    <p class="status-badge closed">Tutup</p>
-                </div>
-            </a>
+            <div id="kantin-list">
+                <a href="pelanggan_detail_warung.html" class="store-card">
+                    
+                    <!-- === PERBAIKAN: Mengganti <a> menjadi <div> === -->
+                    <div class="favorite-button" onclick="toggleFavorite(event, 'Kantin Bu Martin')">
+                        <!-- Default: Outline (far = FontAwesome Regular) -->
+                        <i class="far fa-heart"></i> 
+                    </div>
+                    <!-- ============================================== -->
+
+                    <div class="store-image" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80');"></div>
+                    <div class="store-info">
+                        <h4>Kantin Bu Martin</h4>
+                        <p>Nasi, Soto, Gorengan</p>
+                        <div class="store-info-details">
+                            <span class="rating"><i class="fas fa-star"></i> 4.8</span>
+                            <span>•</span>
+                            <span><i class="fas fa-map-marker-alt"></i> Gedung A</span>
+                            <span>•</span>
+                            <span class="status-badge">Buka</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="pelanggan_detail_warung.html" class="store-card">
+                    
+                    <!-- === PERBAIKAN: Mengganti <a> menjadi <div> === -->
+                    <div class="favorite-button" onclick="toggleFavorite(event, 'Kantin Dzaky')">
+                        <!-- Default: Outline (far = FontAwesome Regular) -->
+                        <i class="far fa-heart"></i>
+                    </div>
+                    <!-- ============================================== -->
+                    
+                    <div class="store-image" style="background-image: url('https://images.unsplash.com/photo-1585411234830-50b1d068e0f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80');"></div>
+                    <div class="store-info">
+                        <h4>Kantin Dzaky</h4>
+                        <p>Mie Ayam & Bakso</p>
+                        <div class="store-info-details">
+                            <span class="rating"><i class="fas fa-star"></i> 4.5</span>
+                            <span>•</span>
+                            <span><i class="fas fa-map-marker-alt"></i> Gedung C</span>
+                            <span>•</span>
+                            <span class="status-badge closed">Tutup</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
         </div>
         
         <div class="navbar">
@@ -79,5 +373,208 @@
             </a>
         </div>
     </div>
+    
+    <div class="modal-overlay" id="locationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Pilih Lokasi Kampus</h3>
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closeLocationModal()">&times;</a>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="kampus-search" class="modal-search-bar" 
+                       placeholder="Cari nama kampus..." onkeyup="filterKampus()">
+                
+                <div class="modal-radio-list" id="kampus-list">
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus11" name="kampus" value="UPN Veteran Yogyakarta" onchange="selectLocation(this)">
+                        <label for="kampus11">UPN Veteran Yogyakarta (UPNVY)</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus12" name="kampus" value="UPN Veteran Jakarta" onchange="selectLocation(this)">
+                        <label for="kampus12">UPN Veteran Jakarta</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus13" name="kampus" value="UPN Veteran Jawa Timur" onchange="selectLocation(this)">
+                        <label for="kampus13">UPN Veteran Jawa Timur</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus1" name="kampus" value="Universitas Gadjah Mada" onchange="selectLocation(this)">
+                        <label for="kampus1">Universitas Gadjah Mada (UGM)</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus2" name="kampus" value="Universitas Indonesia" onchange="selectLocation(this)">
+                        <label for="kampus2">Universitas Indonesia (UI)</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus3" name="kampus" value="Institut Teknologi Bandung" onchange="selectLocation(this)">
+                        <label for="kampus3">Institut Teknologi Bandung (ITB)</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus4" name="kampus" value="Universitas Airlangga" onchange="selectLocation(this)">
+                        <label for="kampus4">Universitas Airlangga (UNAIR)</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus5" name="kampus" value="Institut Pertanian Bogor" onchange="selectLocation(this)">
+                        <label for="kampus5">Institut Pertanian Bogor (IPB)</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus6" name="kampus" value="Universitas Diponegoro" onchange="selectLocation(this)">
+                        <label for="kampus6">Universitas Diponegoro (UNDIP)</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus7" name="kampus" value="Institut Teknologi Sepuluh Nopember" onchange="selectLocation(this)">
+                        <label for="kampus7">Institut Teknologi Sepuluh Nopember (ITS)</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus8" name="kampus" value="Universitas Brawijaya" onchange="selectLocation(this)">
+                        <label for="kampus8">Universitas Brawijaya (UB)</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus9" name="kampus" value="Universitas Padjadjaran" onchange="selectLocation(this)">
+                        <label for="kampus9">Universitas Padjadjaran (UNPAD)</label>
+                    </div>
+                    <div class="radio-list-item">
+                        <input type="radio" id="kampus10" name="kampus" value="Universitas Sebelas Maret" onchange="selectLocation(this)">
+                        <label for="kampus10">Universitas Sebelas Maret (UNS)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        
+        /* * =============================================
+         * === MODIFIKASI BARU: Fungsi Tombol Favorit ===
+         * =============================================
+         */
+        function toggleFavorite(event, kantinName) {
+            // 1. Mencegah card (<a>) di belakangnya ikut ter-klik (SANGAT PENTING!)
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // 2. Ambil ikon di dalam tombol yang diklik
+            const button = event.currentTarget;
+            const icon = button.querySelector('i');
+            
+            // 3. Toggle status
+            if (icon.classList.contains('far')) {
+                // Jika belum favorit (outline) -> jadikan favorit (solid)
+                icon.classList.remove('far'); // far = outline
+                icon.classList.add('fas'); // fas = solid
+                
+                // Beri notifikasi simulasi
+                alert(kantinName + " telah ditambahkan ke Favorit!");
+                // Di aplikasi nyata, ini akan memanggil API untuk menyimpan
+            } else {
+                // Jika sudah favorit (solid) -> kembalikan ke outline
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                
+                // Beri notifikasi simulasi
+                alert(kantinName + " telah dihapus dari Favorit.");
+                // Di aplikasi nyata, ini akan memanggil API untuk menghapus
+            }
+        }
+        
+        // --- JAVASCRIPT UNTUK MODAL LOKASI (YANG SUDAH ADA) ---
+        
+        const locationModal = document.getElementById('locationModal');
+        let currentCampus = "Universitas Gadjah Mada"; // Default
+
+        function openLocationModal() {
+            const radios = document.querySelectorAll('input[name="kampus"]');
+            radios.forEach(radio => {
+                if (radio.value === currentCampus) {
+                    radio.checked = true;
+                }
+            });
+            document.getElementById('kampus-search').value = '';
+            filterKampus(); 
+            
+            locationModal.style.display = 'block';
+            setTimeout(() => locationModal.classList.add('show'), 10);
+        }
+
+        function closeLocationModal() {
+            locationModal.classList.remove('show');
+            setTimeout(() => locationModal.style.display = 'none', 300);
+        }
+        
+        function selectLocation(radioElement) {
+            currentCampus = radioElement.value;
+            document.getElementById('location-text').innerHTML = `Lokasi: <strong>${currentCampus} ></strong>`;
+            refreshKantinList(currentCampus);
+            closeLocationModal();
+        }
+        
+        function refreshKantinList(campusName) {
+            const kantinListDiv = document.getElementById('kantin-list');
+            kantinListDiv.style.opacity = '0.5'; 
+            
+            alert(`Berhasil! Menampilkan kantin untuk ${campusName}.`);
+            
+            setTimeout(() => {
+                if (campusName === "Universitas Indonesia") {
+                    kantinListDiv.innerHTML = `
+                        <a href="#" class="store-card">
+                            <!-- Tombol favorit untuk item baru -->
+                            <div class="favorite-button" onclick="toggleFavorite(event, 'Kantin UI')">
+                                <i class="far fa-heart"></i>
+                            </div>
+                            <div class="store-image" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80');"></div>
+                            <div class="store-info">
+                                <h4>Kantin UI (Simulasi)</h4>
+                                <p>Warung, Kopi, Roti</p>
+                                <div class="store-info-details">
+                                    <span class="rating"><i class="fas fa-star"></i> 4.9</span>
+                                    <span>•</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> Depok</span>
+                                    <span>•</span>
+                                    <span class="status-badge">Buka</span>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                } else {
+                    // Kembali ke default
+                    kantinListDiv.innerHTML = `
+                        <a href="pelanggan_detail_warung.html" class="store-card">
+                            <div class="favorite-button" onclick="toggleFavorite(event, 'Kantin Bu Martin')">
+                                <i class="far fa-heart"></i>
+                            </div>
+                            <div class="store-image" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80');"></div>
+                            <div class="store-info"><h4>Kantin Bu Martin</h4><p>Nasi, Soto, Gorengan</p><div class="store-info-details"><span class="rating"><i class="fas fa-star"></i> 4.8</span><span>•</span><span><i class="fas fa-map-marker-alt"></i> Gedung A</span><span>•</span><span class="status-badge">Buka</span></div></div>
+                        </a>
+                        <a href="pelanggan_detail_warung.html" class="store-card">
+                            <div class="favorite-button" onclick="toggleFavorite(event, 'Kantin Dzaky')">
+                                <i class="far fa-heart"></i>
+                            </div>
+                            <div class="store-image" style="background-image: url('https://images.unsplash.com/photo-1585411234830-50b1d068e0f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80');"></div>
+                            <div class="store-info"><h4>Kantin Dzaky</h4><p>Mie Ayam & Bakso</p><div class="store-info-details"><span class="rating"><i class="fas fa-star"></i> 4.5</span><span>•</span><span><i class="fas fa-map-marker-alt"></i> Gedung C</span><span>•</span><span class="status-badge closed">Tutup</span></div></div>
+                        </a>
+                    `;
+                }
+                kantinListDiv.style.opacity = '1'; 
+            }, 500);
+        }
+        
+        function filterKampus() {
+            let input = document.getElementById('kampus-search');
+            let filter = input.value.toLowerCase();
+            let list = document.getElementById('kampus-list');
+            let items = list.getElementsByClassName('radio-list-item');
+
+            for (let i = 0; i < items.length; i++) {
+                let label = items[i].getElementsByTagName('label')[0];
+                let txtValue = label.textContent || label.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "flex"; 
+                } else {
+                    items[i].style.display = "none"; 
+                }
+            }
+        }
+    </script>
 </body>
 </html>

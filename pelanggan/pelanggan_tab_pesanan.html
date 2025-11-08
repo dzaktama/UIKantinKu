@@ -8,8 +8,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 
     <style>
-        /* MODIFIKASI v7:
-            Menambahkan animasi slide-in
+        /* MODIFIKASI v8:
+            Animasi slide-in
         */
         .content { 
             padding-top: 16px; 
@@ -21,16 +21,12 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* v2: Mengurangi padding agar tidak scroll (Tab Aktif) */
+        /* v7: Style Tab Aktif (Estimasi Card) */
         #aktif .unified-order-card { margin-bottom: 0; }
         #aktif .unified-header { padding: 12px 20px; }
         #aktif .unified-header .info h4 { font-size: 17px; }
         #aktif .unified-header .info p { font-size: 13px; }
-        
-        /* v7: Memberi card abu-abu pada blok estimasi */
-        #aktif .unified-body {
-            padding: 18px 20px;
-        }
+        #aktif .unified-body { padding: 18px 20px; }
         #aktif .estimasi-block {
             background-color: var(--bg-light); 
             border-radius: 12px;
@@ -43,68 +39,66 @@
             text-align: center;
         }
         
-        /* v6: MEMPERTAHANKAN tracker rata kiri */
-        #aktif .rich-tracker {
-            padding-left: 0; 
-        }
+        /* v6: Tracker rata kiri */
+        #aktif .rich-tracker { padding-left: 0; }
         #aktif .rich-tracker li {
             padding-left: 35px; 
-            padding-bottom: 30px; /* Jarak lega (dari v5) */
+            padding-bottom: 30px;
             font-size: 14px; 
         }
-         #aktif .rich-tracker li::before {
-            left: 0px; 
-        }
-        #aktif .rich-tracker li::after {
-            left: 9px; 
-        }
-        
-        /* Style default */
+         #aktif .rich-tracker li::before { left: 0px; }
+        #aktif .rich-tracker li::after { left: 9px; }
         #aktif .rich-tracker li strong { font-weight: 700; }
         #aktif .rich-tracker li span { font-size: 12px; margin-top: 2px; }
-        #aktif .unified-footer { 
-            padding: 16px 20px;
-        }
+        #aktif .unified-footer { padding: 16px 20px; }
         #aktif .unified-footer p { font-size: 12px; }
         #aktif .unified-footer .help-button { font-size: 14px; padding: 8px 12px; }
 
-        /* MODIFIKASI CSS BARU (v8): 
-            Desain ulang total kartu riwayat
+        /* MODIFIKASI CSS BARU (v9): 
+            Desain ulang total kartu riwayat (Professional)
         */
         #riwayat.content-block {
-            background-color: #f0f2f5; /* Latar abu-abu */
-            padding: 16px 20px 0 20px;
+            background-color: #fff; /* Latar putih bersih */
+            padding: 0;
             margin: -16px -20px -16px -20px; /* Full-width */
         }
-        .history-card-pelanggan {
+        .history-card-pro {
             background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: 1px solid var(--border-color);
-            margin-bottom: 16px;
-            overflow: hidden;
-        }
-        /* Header: Nama Kantin & Status */
-        .history-card-pelanggan .order-card-header {
-            padding: 12px 16px;
             border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px;
         }
-        .history-card-pelanggan .order-card-header h4 {
+        /* Header: Nama Kantin & Chevron (Klikabel) */
+        .history-card-pro .header-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: var(--dark-text);
+        }
+        .history-card-pro .header-link h4 {
             font-size: 16px;
+            font-weight: 700;
         }
-        /* Body: Gambar, Item, Tanggal (Klikabel) */
+        .history-card-pro .header-link .chevron {
+            font-size: 14px;
+            color: var(--light-text);
+        }
+        
+        /* Body: Gambar, Item, Harga (Klikabel) */
         .history-card-body-link {
             display: flex;
-            padding: 16px;
+            padding: 16px 0;
             gap: 12px;
             text-decoration: none;
             color: var(--dark-text);
         }
         .history-card-body-link .img-placeholder {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             border-radius: 8px;
-            background: #eee;
+            background-color: #eee;
+            background-size: cover;
+            background-position: center;
             flex-shrink: 0;
         }
         .history-card-body-link .info {
@@ -115,7 +109,7 @@
             font-size: 15px;
             font-weight: 600;
             color: var(--dark-text);
-            margin: 0 0 6px 0;
+            margin: 0 0 4px 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -124,11 +118,36 @@
             font-size: 13px;
             color: var(--light-text);
             font-weight: 500;
+            margin: 0 0 8px 0;
+        }
+        .history-card-body-link .info .total {
+            font-size: 14px;
+            color: var(--dark-text);
+            font-weight: 700;
             margin: 0;
         }
-        /* Footer: Total & Tombol */
-        .history-card-pelanggan .order-card-footer {
-            border-top: 1px solid var(--border-color);
+        
+        /* Footer: Rating & Tombol Aksi */
+        .history-card-pro .footer-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px dashed var(--border-color);
+        }
+        .history-card-pro .rating-link {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        .history-card-pro .rating-link.rated {
+            color: var(--warning);
+        }
+        .history-card-pro .button {
+            width: auto;
+            padding: 10px 16px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -157,75 +176,66 @@
             
             <div id="riwayat" class="content-block hidden">
                 
-                <div class="history-card-pelanggan">
-                    <div class="order-card-header">
+                <div class="history-card-pro">
+                    <a href="pelanggan_detail_riwayat.html" class="header-link">
                         <h4>Kantin Dzaky</h4>
-                        <span class="status-badge status-success">SELESAI</span>
-                    </div>
+                        <i class="fas fa-chevron-right chevron"></i>
+                    </a>
                     <a href="pelanggan_detail_riwayat.html" class="history-card-body-link">
-                        <div class="img-placeholder"></div>
+                        <div class="img-placeholder" style="background-image: url('https://images.unsplash.com/photo-1626725350516-1896020755b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80');"></div>
                         <div class="info">
                             <p class="items">1x Mie Ayam Bakso</p>
                             <p class="date">07 Nov 2025, 10:35</p>
+                            <p class="total">Total: Rp 15.000</p>
                         </div>
                     </a>
-                    <div class="order-card-footer">
-                        <div class="total-price-history">
-                            <p>Total</p>
-                            <h4>Rp 15.000</h4>
-                        </div>
-                        <div class="button-group">
-                            <a href="pelanggan_beri_rating.html" class="button secondary">Beri Rating</a>
-                            <a href="pelanggan_detail_warung.html" class="button">Pesan Lagi</a>
-                        </div>
+                    <div class="footer-actions">
+                        <a href="pelanggan_beri_rating.html" class="rating-link">
+                            Beri Ulasan ⭐
+                        </a>
+                        <a href="pelanggan_detail_warung.html" class="button">Pesan Lagi</a>
                     </div>
                 </div>
                 
-                <div class="history-card-pelanggan">
-                    <div class="order-card-header">
+                <div class="history-card-pro">
+                    <a href="pelanggan_detail_riwayat.html" class="header-link">
                         <h4>Kantin Bu Martin</h4>
-                        <span class="status-badge status-success">SELESAI</span>
-                    </div>
+                        <i class="fas fa-chevron-right chevron"></i>
+                    </a>
                     <a href="pelanggan_detail_riwayat.html" class="history-card-body-link">
-                        <div class="img-placeholder"></div>
+                        <div class="img-placeholder" style="background-image: url('https://images.unsplash.com/photo-1587814213271-72900b21855c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80');"></div>
                         <div class="info">
                             <p class="items">1x Nasi Rames Ayam, 1x Es Teh Manis</p>
                             <p class="date">06 Nov 2025, 12:05</p>
+                            <p class="total">Total: Rp 16.000</p>
                         </div>
                     </a>
-                    <div class="order-card-footer">
-                        <div class="total-price-history">
-                            <p>Total</p>
-                            <h4>Rp 16.000</h4>
-                        </div>
-                        <div class="button-group">
-                            <a href="#" class="button secondary" style="opacity: 0.6; cursor: default;">Dirating</a>
-                            <a href="pelanggan_detail_warung.html" class="button">Pesan Lagi</a>
-                        </div>
+                    <div class="footer-actions">
+                        <a href="#" class="rating-link rated">
+                            Ulasan Anda: ⭐ 5
+                        </a>
+                        <a href="pelanggan_detail_warung.html" class="button">Pesan Lagi</a>
                     </div>
                 </div>
-
-                <div class="history-card-pelanggan">
-                    <div class="order-card-header">
+                
+                <div class="history-card-pro">
+                    <a href="pelanggan_detail_riwayat.html" class="header-link">
                         <h4>Kantin Ardan</h4>
-                        <span class="status-badge status-success">SELESAI</span>
-                    </div>
+                        <i class="fas fa-chevron-right chevron"></i>
+                    </a>
                     <a href="pelanggan_detail_riwayat.html" class="history-card-body-link">
-                        <div class="img-placeholder"></div>
+                        <div class="img-placeholder" style="background-image: url('https://images.unsplash.com/photo-1541818167732-233158f64c6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80');"></div>
                         <div class="info">
                             <p class="items">1x Jus Alpukat</p>
                             <p class="date">05 Nov 2025, 14:30</p>
+                            <p class="total">Total: Rp 8.000</p>
                         </div>
                     </a>
-                    <div class="order-card-footer">
-                        <div class="total-price-history">
-                            <p>Total</p>
-                            <h4>Rp 8.000</h4>
-                        </div>
-                        <div class="button-group">
-                            <a href="pelanggan_beri_rating.html" class="button secondary">Beri Rating</a>
-                            <a href="pelanggan_detail_warung.html" class="button">Pesan Lagi</a>
-                        </div>
+                    <div class="footer-actions">
+                        <a href="pelanggan_beri_rating.html" class="rating-link">
+                            Beri Ulasan ⭐
+                        </a>
+                        <a href="pelanggan_detail_warung.html" class="button">Pesan Lagi</a>
                     </div>
                 </div>
 
