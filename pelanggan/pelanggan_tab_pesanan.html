@@ -8,93 +8,127 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 
     <style>
-        .content { padding-top: 16px; padding-bottom: 16px; }
+        /* MODIFIKASI v7:
+            Menambahkan animasi slide-in
+        */
+        .content { 
+            padding-top: 16px; 
+            padding-bottom: 16px; 
+            animation: slideInFromRight 0.4s ease-out forwards;
+        }
+        @keyframes slideInFromRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* v2: Mengurangi padding agar tidak scroll (Tab Aktif) */
         #aktif .unified-order-card { margin-bottom: 0; }
         #aktif .unified-header { padding: 12px 20px; }
         #aktif .unified-header .info h4 { font-size: 17px; }
         #aktif .unified-header .info p { font-size: 13px; }
-        #aktif .unified-body { padding: 18px 20px; }
-        #aktif .estimasi-block { margin-bottom: 18px; }
-        #aktif .estimasi-block h2 { font-size: 30px; }
-        #aktif .rich-tracker li { padding-bottom: 20px; font-size: 13.5px; }
-        #aktif .rich-tracker li strong { font-weight: 700; }
-        #aktif .rich-tracker li span { font-size: 11.5px; margin-top: 1px; }
-        #aktif .unified-footer { padding: 12px 20px; }
-        #aktif .unified-footer p { font-size: 11px; }
-        #aktif .unified-footer .help-button { font-size: 13px; padding: 6px 10px; }
-
-        /* MODIFIKASI TOTAL CSS (v3): 
-            Untuk Desain Riwayat yang Jauh Lebih Baik (Ala Grab/Shopee)
-        */
         
-        /* 1. Hapus background abu-abu di tab riwayat */
-        #riwayat.content-block {
-            background-color: #fff;
-            padding: 0;
-            margin: 0 -20px; /* Full-width */
+        /* v7: Memberi card abu-abu pada blok estimasi */
+        #aktif .unified-body {
+            padding: 18px 20px;
+        }
+        #aktif .estimasi-block {
+            background-color: var(--bg-light); 
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        #aktif .estimasi-block h2 {
+            font-size: 32px; 
+            text-align: center;
         }
         
-        /* 2. Style Kartu Riwayat Baru */
-        .history-card-new {
+        /* v6: MEMPERTAHANKAN tracker rata kiri */
+        #aktif .rich-tracker {
+            padding-left: 0; 
+        }
+        #aktif .rich-tracker li {
+            padding-left: 35px; 
+            padding-bottom: 30px; /* Jarak lega (dari v5) */
+            font-size: 14px; 
+        }
+         #aktif .rich-tracker li::before {
+            left: 0px; 
+        }
+        #aktif .rich-tracker li::after {
+            left: 9px; 
+        }
+        
+        /* Style default */
+        #aktif .rich-tracker li strong { font-weight: 700; }
+        #aktif .rich-tracker li span { font-size: 12px; margin-top: 2px; }
+        #aktif .unified-footer { 
+            padding: 16px 20px;
+        }
+        #aktif .unified-footer p { font-size: 12px; }
+        #aktif .unified-footer .help-button { font-size: 14px; padding: 8px 12px; }
+
+        /* MODIFIKASI CSS BARU (v8): 
+            Desain ulang total kartu riwayat
+        */
+        #riwayat.content-block {
+            background-color: #f0f2f5; /* Latar abu-abu */
+            padding: 16px 20px 0 20px;
+            margin: -16px -20px -16px -20px; /* Full-width */
+        }
+        .history-card-pelanggan {
             background: #fff;
-            margin-bottom: 10px; /* Jarak antar kartu */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        /* Header: Nama Kantin & Status */
+        .history-card-pelanggan .order-card-header {
+            padding: 12px 16px;
             border-bottom: 1px solid var(--border-color);
         }
-        
-        /* 3. Header Kartu (Nama Kantin & Status) */
-        .history-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px 12px 20px;
-        }
-        .history-card-header h4 {
+        .history-card-pelanggan .order-card-header h4 {
             font-size: 16px;
-            font-weight: 700;
         }
-        .history-card-header .status-badge {
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 6px;
-            color: #fff;
-            background: var(--success);
-        }
-
-        /* 4. Body Kartu (Item & Tanggal - Klikabel) */
-        .history-card-body {
+        /* Body: Gambar, Item, Tanggal (Klikabel) */
+        .history-card-body-link {
             display: flex;
-            padding: 0px 20px 16px 20px;
+            padding: 16px;
             gap: 12px;
             text-decoration: none;
             color: var(--dark-text);
         }
-        .history-card-body .img-placeholder {
+        .history-card-body-link .img-placeholder {
             width: 60px;
             height: 60px;
             border-radius: 8px;
             background: #eee;
             flex-shrink: 0;
         }
-        .history-card-body .info {
+        .history-card-body-link .info {
             flex-grow: 1;
+            min-width: 0;
         }
-        .history-card-body .info .items {
+        .history-card-body-link .info .items {
             font-size: 15px;
             font-weight: 600;
             color: var(--dark-text);
             margin: 0 0 6px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .history-card-body .info .date {
+        .history-card-body-link .info .date {
             font-size: 13px;
             color: var(--light-text);
             font-weight: 500;
             margin: 0;
         }
-
-        /* 5. Footer Kartu (Total & Tombol) */
-        .history-card-new .order-card-footer {
-            border-top: 1px solid var(--border-color); /* Garis pemisah tipis */
+        /* Footer: Total & Tombol */
+        .history-card-pelanggan .order-card-footer {
+            border-top: 1px solid var(--border-color);
         }
     </style>
 </head>
@@ -123,15 +157,16 @@
             
             <div id="riwayat" class="content-block hidden">
                 
-                <div class="history-card-new">
-                    <div class="history-card-header">
+                <div class="history-card-pelanggan">
+                    <div class="order-card-header">
                         <h4>Kantin Dzaky</h4>
-                        <span class="status-badge">SELESAI</span>
+                        <span class="status-badge status-success">SELESAI</span>
                     </div>
-                    <a href="pelanggan_detail_riwayat.html" class="history-card-body">
-                        <div class="img-placeholder"></div> <div class="info">
-                            <p class="items">Mie Ayam Bakso</p>
-                            <p class="date"><i class="fas fa-calendar-alt"></i> 07 Nov 2025, 10:35</p>
+                    <a href="pelanggan_detail_riwayat.html" class="history-card-body-link">
+                        <div class="img-placeholder"></div>
+                        <div class="info">
+                            <p class="items">1x Mie Ayam Bakso</p>
+                            <p class="date">07 Nov 2025, 10:35</p>
                         </div>
                     </a>
                     <div class="order-card-footer">
@@ -146,15 +181,16 @@
                     </div>
                 </div>
                 
-                <div class="history-card-new">
-                    <div class="history-card-header">
+                <div class="history-card-pelanggan">
+                    <div class="order-card-header">
                         <h4>Kantin Bu Martin</h4>
-                        <span class="status-badge">SELESAI</span>
+                        <span class="status-badge status-success">SELESAI</span>
                     </div>
-                    <a href="pelanggan_detail_riwayat.html" class="history-card-body">
-                        <div class="img-placeholder"></div> <div class="info">
-                            <p class="items">Nasi Rames Ayam + 1 lainnya</p>
-                            <p class="date"><i class="fas fa-calendar-alt"></i> 06 Nov 2025, 12:05</p>
+                    <a href="pelanggan_detail_riwayat.html" class="history-card-body-link">
+                        <div class="img-placeholder"></div>
+                        <div class="info">
+                            <p class="items">1x Nasi Rames Ayam, 1x Es Teh Manis</p>
+                            <p class="date">06 Nov 2025, 12:05</p>
                         </div>
                     </a>
                     <div class="order-card-footer">
@@ -169,15 +205,16 @@
                     </div>
                 </div>
 
-                <div class="history-card-new">
-                    <div class="history-card-header">
+                <div class="history-card-pelanggan">
+                    <div class="order-card-header">
                         <h4>Kantin Ardan</h4>
-                        <span class="status-badge">SELESAI</span>
+                        <span class="status-badge status-success">SELESAI</span>
                     </div>
-                    <a href="pelanggan_detail_riwayat.html" class="history-card-body">
-                        <div class="img-placeholder"></div> <div class="info">
-                            <p class="items">Jus Alpukat</p>
-                            <p class="date"><i class="fas fa-calendar-alt"></i> 05 Nov 2025, 14:30</p>
+                    <a href="pelanggan_detail_riwayat.html" class="history-card-body-link">
+                        <div class="img-placeholder"></div>
+                        <div class="info">
+                            <p class="items">1x Jus Alpukat</p>
+                            <p class="date">05 Nov 2025, 14:30</p>
                         </div>
                     </a>
                     <div class="order-card-footer">

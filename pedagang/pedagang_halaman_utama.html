@@ -6,6 +6,140 @@
     <title>Dashboard - KantinKu</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    
+    <style>
+        .content { 
+            padding-bottom: 20px; 
+            animation: slideInFromRight 0.4s ease-out forwards;
+        }
+        
+        /* 1. Style untuk Bar Status Toko */
+        .store-status-bar {
+            background: #fff; border-radius: 12px; padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+        }
+        .store-status-bar .info h4 { font-size: 16px; font-weight: 700; margin: 0; }
+        .store-status-bar .info p { font-size: 14px; font-weight: 600; color: var(--success); margin: 2px 0 0 0; }
+        .store-status-bar .action { font-size: 14px; font-weight: 600; color: var(--primary-color); }
+
+        /* 2. Style untuk Modal (Umum) */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 99;
+            left: 50%; transform: translateX(-50%); max-width: 375px; 
+        }
+        .modal-content {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            background: #f0f2f5; border-radius: 20px 20px 0 0;
+            transform: translateY(100%); transition: transform 0.3s ease-out;
+            max-height: 80%; overflow-y: auto;
+        }
+        .modal-overlay.show .modal-content { transform: translateY(0); }
+        .modal-header {
+            padding: 16px 20px; background: #fff;
+            border-bottom: 1px solid var(--border-color); border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+        .modal-header h3 { font-size: 16px; font-weight: 700; text-align: center; margin: 0; }
+        .modal-close-button {
+            position: absolute; top: 12px; left: 16px;
+            font-size: 24px; color: #888; cursor: pointer; text-decoration: none;
+        }
+        .modal-body { padding: 20px; }
+
+        /* 3. Style untuk Tab Pesanan di Dashboard */
+        .dashboard-tab-container {
+            display: flex; background-color: #fff; border-radius: 10px;
+            overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 16px;
+        }
+        .dashboard-tab-item {
+            flex: 1; padding: 12px 10px; text-align: center; font-size: 13px;
+            font-weight: 600; color: var(--light-text); background-color: #f9f9f9;
+            text-decoration: none; border-right: 1px solid var(--border-color); cursor: pointer;
+        }
+        .dashboard-tab-item:last-child { border-right: none; }
+        .dashboard-tab-item.active { color: #fff; background-color: var(--primary-color); }
+        .dashboard-content-block { display: none; }
+        .dashboard-content-block.active { display: block; }
+        
+        /* 4. Style Kartu Statistik (Proporsional) */
+        .stat-card-container {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        .stat-card {
+            padding: 12px; display: flex;
+            align-items: center; gap: 12px;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        .stat-card:hover {
+            background-color: #fcfcfc;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.07);
+        }
+        .stat-card .stat-icon {
+            flex-shrink: 0; width: 44px; height: 44px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; color: #fff;
+        }
+        .stat-card .stat-icon.success { background-color: var(--success); }
+        .stat-card .stat-icon.info { background-color: var(--info); }
+        .stat-card .stat-info { flex-grow: 1; }
+        .stat-card .title {
+            font-size: 13px; font-weight: 600; color: var(--light-text); margin-bottom: 2px; gap: 0;
+        }
+        .stat-card .value {
+            font-size: 20px; font-weight: 800; color: var(--dark-text); white-space: nowrap;
+        }
+        .stat-card .value.success { color: var(--dark-text); }
+        
+        /* 5. CSS untuk Animasi Slide-in */
+        @keyframes slideInFromRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* 6. CSS Grafik */
+        .chart-container {
+            background: #fff; border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 24px 10px 10px 10px; height: 180px;
+            display: flex; justify-content: space-around; align-items: flex-end;
+            gap: 10px;
+        }
+        .chart-bar-group {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end; gap: 6px; 
+            height: 100%;
+        }
+        .chart-bar-value {
+            font-size: 11px;
+            font-weight: 700;
+            /* MODIFIKASI: Diubah ke hijau tua */
+            color: var(--primary-color);
+            opacity: 0; 
+            animation: fadeIn 0.5s ease-out 0.8s forwards; 
+        }
+        .chart-bar-wrapper {
+            width: 70%; height: 100%;
+            display: flex; align-items: flex-end;
+        }
+        .chart-bar {
+            width: 100%;
+            /* MODIFIKASI: Diubah ke hijau MUDA */
+            background-color: #e4f5e9; 
+            border-radius: 4px;
+            animation: growBar 0.8s ease-out forwards;
+        }
+        .chart-bar-label { font-size: 10px; font-weight: 600; color: var(--light-text); }
+        @keyframes growBar {
+            from { height: 0; opacity: 0; }
+            to { height: 100%; opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
     <div class="mobile-screen">
@@ -13,67 +147,152 @@
             Dashboard
         </div>
         <div class="content">
-            <div class="store-status">
-                <h4>Toko Buka</h4>
-                <label class="switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                </label>
+            
+            <div class="store-status-bar" onclick="openStatusModal()">
+                <div class="info"><h4>Status Toko</h4><p id="status-text">Buka</p></div>
+                <span class="action">Ubah &gt;</span>
             </div>
-            <div class="section-title">Ringkasan Hari Ini</div>
-            <div class="stat-card-container">
-                <div class="stat-card">
-                    <div class="title"><i class="fas fa-wallet"></i> Pendapatan</div>
-                    <div class="value success">Rp 180.000</div>
-                </div>
-                <div class="stat-card">
-                    <div class="title"><i class="fas fa-check-square"></i> Pesanan</div>
-                    <div class="value">12</div>
-                </div>
+            
+            <div class="section-title">Pesanan Aktif</div>
+            <div class="dashboard-tab-container">
+                <a href="javascript:void(0)" class="dashboard-tab-item active" onclick="showDashTab(event, 'dash-masuk')">Masuk (1)</a>
+                <a href="javascript:void(0)" class="dashboard-tab-item" onclick="showDashTab(event, 'dash-dimasak')">Dimasak (2)</a>
+                <a href="javascript:void(0)" class="dashboard-tab-item" onclick="showDashTab(event, 'dash-siap')">Siap (1)</a>
             </div>
+
+            <div id="dash-masuk" class="dashboard-content-block active">
+                <div class="order-card"><div class="order-card-header"><h4>Budi Santoso</h4><span class="status-badge status-info">BARU</span></div><div class="order-card-body"><p class="items">1x Nasi Rames Ayam, 1x Es Teh</p><p class="total-amount">Total: Rp 15.000</p></div><div class="order-card-footer"><a href="pedagang_detail_pesanan.html" class="button" style="width: 100%;">Lihat Detail</a></div></div>
+            </div>
+            <div id="dash-dimasak" class="dashboard-content-block">
+                <div class="order-card"><div class="order-card-header"><h4>Andi</h4><span class="status-badge status-info">DIMASAK</span></div><div class="order-card-body"><p class="items">1x Mie Ayam Bakso</p></div></div> 
+                <div class="order-card"><div class="order-card-header"><h4>Citra</h4><span class="status-badge status-info">DIMASAK</span></div><div class="order-card-body"><p class="items">2x Nasi Goreng</p></div></div> 
+            </div>
+            <div id="dash-siap" class="dashboard-content-block">
+                <div class="order-card"><div class="order-card-header"><h4>David</h4><span class="status-badge status-success">SIAP DIAMBIL</span></div><div class="order-card-body"><p class="items">1x Jus Alpukat</p></div></div>
+            </div>
+            
             <div class="section-title">Grafik Penjualan</div>
-            <div class="chart-placeholder">[ Placeholder Grafik Penjualan 7 Hari ]</div>
-            <div class="section-title">
-                Pesanan Baru
-                <a href="pedagang_tab_pesanan.html" class="see-all">Lihat Semua</a>
+            
+            <div class="chart-container" id="chart-dashboard">
+                </div>
+
+            <div class="section-title">Ringkasan Hari Ini</div>
+            
+            <div class="stat-card-container">
+                <a href="pedagang_tab_laporan.html" style="text-decoration: none;">
+                    <div class="stat-card">
+                        <div class="stat-icon success"><i class="fas fa-wallet"></i></div>
+                        <div class="stat-info"><div class="title">Pendapatan</div><div class="value">Rp 180.000</div></div>
+                    </div>
+                </a>
+                <a href="pedagang_tab_laporan.html" style="text-decoration: none;">
+                    <div class="stat-card">
+                        <div class="stat-icon info"><i class="fas fa-check-square"></i></div>
+                        <div class="stat-info"><div class="title">Pesanan</div><div class="value">12</div></div>
+                    </div>
+                </a>
             </div>
-            <div class="order-card">
-                <div class="order-card-header">
-                    <h4>Budi Santoso</h4>
-                    <span class="status-badge status-warning">BARU</span>
-                </div>
-                <div class="order-card-body">
-                    <p class="items">1x Nasi Rames Ayam, 1x Es Teh</p>
-                    <p class="total-amount">Total: Rp 15.000</p>
-                </div>
-                <div class="order-card-footer">
-                    <a href="pedagang_detail_pesanan.html" class="button secondary" style="width: 100%;">Lihat Detail</a>
-                </div>
-            </div>
+
         </div>
         <div class="navbar">
-            <a href="pedagang_halaman_utama.html" class="nav-item active">
-                <div class="icon"><i class="fas fa-chart-pie"></i></div>
-                <div>Dashboard</div>
-            </a>
-            <a href="pedagang_tab_pesanan.html" class="nav-item">
-                <div class="icon"><i class="fas fa-receipt"></i></div>
-                <div>Pesanan</div>
-            </a>
-            <a href="pedagang_tab_kelola_menu.html" class="nav-item">
-                <div class="icon"><i class="fas fa-book-open"></i></div>
-                <div>Menu</div>
-            </a>
-            <a href="pedagang_tab_laporan.html" class="nav-item">
-                <div class="icon"><i class="fas fa-chart-line"></i></div>
-                <div>Laporan</div>
-            </a>
-            <a href="pedagang_tab_profil.html" class="nav-item">
-                <div class="icon"><i class="fas fa-user-circle"></i></div>
-                <div>Profil</div>
-            </a>
+            <a href="pedagang_halaman_utama.html" class="nav-item active"><div class="icon"><i class="fas fa-chart-pie"></i></div><div>Dashboard</div></a>
+            <a href="pedagang_tab_pesanan.html" class="nav-item"><div class="icon"><i class="fas fa-receipt"></i></div><div>Pesanan</div></a>
+            <a href="pedagang_tab_kelola_menu.html" class="nav-item"><div class="icon"><i class="fas fa-book-open"></i></div><div>Menu</div></a>
+            <a href="pedagang_tab_laporan.html" class="nav-item"><div class="icon"><i class="fas fa-chart-line"></i></div><div>Laporan</div></a>
+            <a href="pedagang_tab_profil.html" class="nav-item"><div class="icon"><i class="fas fa-user-circle"></i></div><div>Profil</div></a>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
+    <div class="modal-overlay" id="statusModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Atur Status Toko</h3><a href="javascript:void(0)" class="modal-close-button" onclick="closeStatusModal()">&times;</a></div>
+            <div class="modal-body">
+                <div class="radio-list-item"><input type="radio" id="status_buka" name="status_toko" value="Buka" data-color="var(--success)" checked><label for="status_buka">Buka (Menerima Pesanan)</label></div>
+                <div class="radio-list-item"><input type="radio" id="status_sibuk" name="status_toko" value="Sibuk (Tutup Sementara)" data-color="var(--warning)"><label for="status_sibuk">Sibuk (Tutup Pesanan Sementara)</label></div>
+                <div class="radio-list-item"><input type="radio" id="status_tutup" name="status_toko" value="Tutup Hari Ini" data-color="var(--danger)"><label for="status_tutup">Tutup Hari Ini</label></div>
+            </div>
+            <div class="sticky-button-container"><a href="javascript:void(0)" class="button" onclick="saveStatus()">Simpan Status</a></div>
+        </div>
+    </div>
+
+    <script>
+        // --- JAVASCRIPT UNTUK MODAL STATUS TOKO ---
+        const statusModal = document.getElementById('statusModal');
+        const statusText = document.getElementById('status-text');
+        let currentStatus = "Buka"; 
+        function openStatusModal() {
+            document.querySelector(`input[name="status_toko"][value="${currentStatus}"]`).checked = true;
+            statusModal.style.display = 'block';
+            setTimeout(() => statusModal.classList.add('show'), 10);
+        }
+        function closeStatusModal() {
+            statusModal.classList.remove('show');
+            setTimeout(() => statusModal.style.display = 'none', 300);
+        }
+        function saveStatus() {
+            const selected = document.querySelector('input[name="status_toko"]:checked');
+            currentStatus = selected.value; 
+            statusText.innerText = currentStatus;
+            statusText.style.color = selected.getAttribute('data-color');
+            alert('Status toko diperbarui menjadi: ' + currentStatus);
+            closeStatusModal();
+        }
+
+        // --- JAVASCRIPT UNTUK TAB DASHBOARD ---
+        function showDashTab(event, tabId) {
+            var contentBlocks = document.querySelectorAll('.dashboard-content-block');
+            contentBlocks.forEach(function(block) { block.classList.remove('active'); });
+            var tabItems = document.querySelectorAll('.dashboard-tab-item');
+            tabItems.forEach(function(tab) { tab.classList.remove('active'); });
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        /* JAVASCRIPT GRAFIK (dari langkah sebelumnya) */
+        const chartData = {
+            '7 Hari': [
+                { label: 'Sen', value: '90k', height: '40%' },
+                { label: 'Sel', value: '120k', height: '60%' },
+                { label: 'Rab', value: '100k', height: '50%' },
+                { label: 'Kam', value: '160k', height: '80%' },
+                { label: 'Jum', value: '180k', height: '90%' },
+                { label: 'Sab', value: '70k', height: '30%' },
+                { label: 'Min', value: '50k', height: '20%' }
+            ]
+        };
+
+        function refreshChart(periodName) {
+            const chartContainer = document.getElementById('chart-dashboard');
+            chartContainer.innerHTML = ''; 
+            const data = chartData[periodName] || chartData['7 Hari']; 
+            data.forEach((item, index) => {
+                const delay = (index + 1) * 0.1; 
+                const group = document.createElement('div');
+                group.className = 'chart-bar-group';
+                const valueLabel = document.createElement('span');
+                valueLabel.className = 'chart-bar-value';
+                valueLabel.innerText = item.value;
+                valueLabel.style.animationDelay = `${delay + 0.5}s`; 
+                const barWrapper = document.createElement('div');
+                barWrapper.className = 'chart-bar-wrapper';
+                barWrapper.style.height = item.height; 
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.animationDelay = `${delay}s`;
+                const label = document.createElement('span');
+                label.className = 'chart-bar-label';
+                label.innerText = item.label;
+                barWrapper.appendChild(bar);
+                group.appendChild(valueLabel);
+                group.appendChild(barWrapper);
+                group.appendChild(label);
+                chartContainer.appendChild(group);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshChart('7 Hari');
+        });
+    </script>
 </body>
 </html>

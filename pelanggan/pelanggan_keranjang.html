@@ -8,7 +8,59 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 
     <style>
-        /* CSS UMUM UNTUK SEMUA MODAL */
+        /* Animasi slide-in */
+        .content {
+            animation: slideInFromRight 0.4s ease-out forwards;
+        }
+        @keyframes slideInFromRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* CSS untuk Toggle "Langsung / Jadwal" (Versi Geser) */
+        .pickup-toggle-container {
+            display: flex;
+            background-color: #fff;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .pickup-toggle-new {
+            display: flex;
+            position: relative; /* Kunci untuk slider */
+            width: 100%;
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 4px;
+        }
+        .toggle-slider {
+            position: absolute;
+            top: 4px;
+            left: 4px; /* Default di "Langsung" */
+            height: calc(100% - 8px);
+            background-color: var(--primary-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease-in-out;
+            z-index: 1;
+        }
+        .toggle-option {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--light-text);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+            position: relative; /* Agar di atas slider */
+            z-index: 2;
+        }
+        .toggle-option.active {
+            color: white; /* Teks jadi putih saat di atas slider */
+        }
+        
+        /* CSS MODAL (UMUM) */
         .modal-overlay {
             display: none; position: fixed;
             top: 0; left: 0;
@@ -25,7 +77,7 @@
             border-radius: 20px 20px 0 0;
             transform: translateY(100%);
             transition: transform 0.3s ease-out;
-            max-height: 80%; /* Batasi tinggi modal */
+            max-height: 80%;
             overflow-y: auto;
         }
         .modal-overlay.show .modal-content {
@@ -66,34 +118,48 @@
         
         /* CSS Khusus Modal Voucher */
         .modal-voucher-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #fff;
-            padding: 16px 20px;
+            display: flex; align-items: center; gap: 12px;
+            background: #fff; padding: 16px 20px;
             border-bottom: 1px solid var(--border-color);
         }
         .modal-voucher-item input[type="radio"] {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
+            width: 20px; height: 20px; flex-shrink: 0;
             accent-color: var(--primary-color);
         }
         .modal-voucher-item .info { flex-grow: 1; }
         .modal-voucher-item .info h5 {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 4px;
+            font-size: 15px; font-weight: 700; margin-bottom: 4px;
         }
         .modal-voucher-item .info p {
-            font-size: 12px;
-            color: var(--light-text);
-            margin: 0;
+            font-size: 12px; color: var(--light-text); margin: 0;
         }
         .modal-voucher-item.disabled .info h5,
         .modal-voucher-item.disabled .info p {
-            color: #ccc;
-            text-decoration: line-through;
+            color: #ccc; text-decoration: line-through;
+        }
+        
+        /* CSS Modal Waktu */
+        .modal-body-time {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Tetap 2 kolom */
+            gap: 12px;
+        }
+        .time-slot {
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            background: #fff;
+            color: var(--dark-text);
+            cursor: pointer;
+            border: 1.5px solid var(--border-color);
+            text-align: center;
+        }
+        .time-slot.active {
+            background: #e4f5e9;
+            color: var(--primary-color);
+            border-color: var(--primary-color);
         }
     </style>
 </head>
@@ -103,6 +169,18 @@
         <div class="header">
             <a href="pelanggan_detail_warung.html" class="back-button">&lt;</a>
             Keranjang Anda
+        </div>
+
+        <div class="pickup-toggle-container">
+            <div class="pickup-toggle-new">
+                <div class="toggle-slider"></div>
+                <div class="toggle-option active" id="mode-langsung" onclick="selectPickupMode('langsung', this)">
+                    <i class="fas fa-bolt"></i> Langsung
+                </div>
+                <div class="toggle-option" id="mode-jadwal" onclick="selectPickupMode('jadwal', this)">
+                    <i class="fas fa-clock"></i> Jadwal Pickup
+                </div>
+            </div>
         </div>
         
         <div class="content" style="background-color: #fff; padding-bottom: 0;">
@@ -269,21 +347,35 @@
             </div>
         </div>
     </div>
-
+    
+    <div class="modal-overlay" id="timeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Pilih Waktu Pickup</h3>
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closeTimeModal()">&times;</a>
+            </div>
+            <div class="modal-body modal-body-time" id="time-slot-container">
+                </div>
+            <div class="sticky-button-container">
+                <a href="javascript:void(0)" class="button" onclick="saveTime()">Konfirmasi Waktu</a>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Variabel global untuk modal
         const globalModal = document.getElementById('globalNoteModal');
         const voucherModal = document.getElementById('voucherModal');
         const paymentModal = document.getElementById('paymentModal');
+        const timeModal = document.getElementById('timeModal'); 
         
         // Database simulasi
-        let cartNotes = {
-            'item1': 'Tidak pakai sayur.',
-            'item2': 'Es sedikit.'
-        };
+        let cartNotes = { 'item1': 'Tidak pakai sayur.', 'item2': 'Es sedikit.' };
         let selectedVoucher = null;
         let selectedPayment = 'QRIS'; 
+        let selectedTime = null; 
+        let currentPickupMode = 'langsung'; 
+        
         const subtotal = 15000;
         const biayaLayanan = 1000;
 
@@ -372,6 +464,119 @@
             closePaymentModal();
         }
         
+        /* MODIFIKASI JAVASCRIPT: 
+            Fungsi untuk menggerakkan slider + render slot
+        */
+        function selectPickupMode(mode, element) {
+            const slider = document.querySelector('.toggle-slider');
+            slider.style.left = element.offsetLeft + 'px';
+            slider.style.width = element.offsetWidth + 'px';
+
+            document.querySelectorAll('.toggle-option').forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            
+            currentPickupMode = mode;
+            
+            if (mode === 'langsung') {
+                selectedTime = null; 
+                document.getElementById('mode-jadwal').innerHTML = '<i class="fas fa-clock"></i> Jadwal Pickup';
+            } else if (mode === 'jadwal') {
+                openTimeModal(); 
+            }
+        }
+        
+        function openTimeModal() {
+            renderTimeSlots(); // Panggil fungsi render
+            timeModal.style.display = 'block';
+            setTimeout(() => timeModal.classList.add('show'), 10);
+        }
+
+        function closeTimeModal() {
+            timeModal.classList.remove('show');
+            setTimeout(() => timeModal.style.display = 'none', 300);
+            
+            if (!selectedTime) {
+                selectPickupMode('langsung', document.getElementById('mode-langsung'));
+            }
+        }
+        
+        function selectTime(timeString, element) {
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('active');
+            });
+            element.classList.add('active');
+            selectedTime = timeString; 
+        }
+        
+        function saveTime() {
+            if (!selectedTime) {
+                alert('Silakan pilih slot waktu terlebih dahulu.');
+                return;
+            }
+            document.getElementById('mode-jadwal').innerHTML = `<i class="fas fa-clock"></i> ${selectedTime}`;
+            alert(`Waktu pickup diatur ke: ${selectedTime}`);
+            closeTimeModal();
+        }
+        
+        // FUNGSI BARU: Untuk me-render slot waktu
+        function renderTimeSlots() {
+            const container = document.getElementById('time-slot-container');
+            container.innerHTML = ''; // Kosongkan dulu
+            
+            // --- Simulasi Waktu ---
+            const simNow = new Date();
+            simNow.setHours(10, 30, 0); // Anggap sekarang jam 10:30
+            const prepBufferMinutes = 30; // 30 menit persiapan
+            const slotIncrementMinutes = 15; // Slot 15 menitan
+            const closingTimeHours = 16;
+            // ------------------------
+
+            // Fungsi helper untuk membulatkan ke 15 menit berikutnya
+            function roundUpToNearest(minutes) {
+                return Math.ceil(minutes / slotIncrementMinutes) * slotIncrementMinutes;
+            }
+            
+            // Fungsi helper format jam: 5 -> "05"
+            function pad(n) {
+                return n < 10 ? '0' + n : n;
+            }
+
+            // Hitung slot pertama
+            let firstSlot = new Date(simNow.getTime() + prepBufferMinutes * 60000);
+            let firstMinutes = roundUpToNearest(firstSlot.getMinutes());
+            firstSlot.setMinutes(firstMinutes);
+
+            let closingTime = new Date(simNow);
+            closingTime.setHours(closingTimeHours, 0, 0);
+
+            // Loop untuk membuat slot
+            let currentSlotTime = firstSlot;
+            while(currentSlotTime < closingTime) {
+                let slotEnd = new Date(currentSlotTime.getTime() + slotIncrementMinutes * 60000);
+                
+                // Format string: "11:00 - 11:15"
+                let startTimeStr = `${pad(currentSlotTime.getHours())}:${pad(currentSlotTime.getMinutes())}`;
+                let endTimeStr = `${pad(slotEnd.getHours())}:${pad(slotEnd.getMinutes())}`;
+                let timeString = `${startTimeStr} - ${endTimeStr}`;
+
+                // Buat elemen div
+                let slotDiv = document.createElement('div');
+                slotDiv.className = 'time-slot';
+                slotDiv.innerText = timeString;
+                slotDiv.setAttribute('onclick', `selectTime('${timeString}', this)`);
+
+                // Tandai jika ini adalah slot yang sudah dipilih
+                if (selectedTime === timeString) {
+                    slotDiv.classList.add('active');
+                }
+                
+                container.appendChild(slotDiv);
+                
+                // Maju ke slot berikutnya
+                currentSlotTime.setMinutes(currentSlotTime.getMinutes() + slotIncrementMinutes);
+            }
+        }
+
         // --- Fungsi Update Total ---
         function updateTotal() {
             let diskon = selectedVoucher ? parseInt(selectedVoucher) : 0;
@@ -388,15 +593,21 @@
             document.getElementById('total-payment-bottom').innerText = formattedTotal;
         }
 
-        // Inisialisasi tampilan catatan & total saat halaman dimuat
+        // Inisialisasi tampilan
         document.addEventListener('DOMContentLoaded', () => {
-            saveGlobalNotes(); // update tampilan catatan
-            updateTotal();     // update tampilan harga (jika ada voucher terpilih)
+            saveGlobalNotes(); 
+            updateTotal();     
             
-            // Inisialisasi tampilan pembayaran
-            document.getElementById('payment-summary-status').innerText = `${selectedPayment} >`;
-            document.getElementById('payment-summary-status').style.color = "var(--dark-text)";
-            document.getElementById('payment-summary-status').style.fontWeight = "700";
+            const paymentStatus = document.getElementById('payment-summary-status');
+            paymentStatus.innerText = `${selectedPayment} >`;
+            paymentStatus.style.color = "var(--dark-text)";
+            paymentStatus.style.fontWeight = "700";
+
+            // Inisialisasi posisi slider
+            const initialActiveToggle = document.getElementById('mode-langsung');
+            const slider = document.querySelector('.toggle-slider');
+            slider.style.left = initialActiveToggle.offsetLeft + 'px';
+            slider.style.width = initialActiveToggle.offsetWidth + 'px';
         });
     </script>
 </body>

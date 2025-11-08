@@ -34,6 +34,17 @@
             border-radius: 0;
             border: none;
             box-shadow: none;
+            margin-bottom: 10px;
+        }
+        /* Style untuk catatan (dari keranjang) */
+        .item-note-display {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--light-text);
+            background-color: var(--bg-light);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 8px;
         }
     </style>
 </head>
@@ -49,16 +60,16 @@
             
             <div class="history-kantin-header">
                 <div class="img-placeholder"></div>
-                <h4>Kantin Dzaky</h4>
+                <h4>Kantin Bu Martin</h4>
             </div>
 
             <div class="unified-order-card">
-                <div class="unified-header">
+                <div class="unified-header" style="border-bottom: none;">
                     <div class="info">
                         <h4 style="font-size: 16px; color: var(--success);"><i class="fas fa-check-circle"></i> Pesanan Selesai</h4>
-                        <p style="font-size: 13px;">Selesai pada 07 Nov 2025, 10:35</p>
+                        <p style="font-size: 13px;">06 Nov 2025, 12:05</p>
                     </div>
-                    <span style="font-size: 13px; font-weight: 600; color: var(--light-text);">#12340GHI</span>
+                    <span style="font-size: 13px; font-weight: 600; color: var(--light-text);">#12339JKL</span>
                 </div>
 
                 <div class="order-item-list">
@@ -66,29 +77,41 @@
                         <div class="item-name">
                             <span class="item-qty">1x</span>
                             <div>
-                                <h5>Mie Ayam Bakso</h5>
-                                <p class="item-note-display" style="font-size: 12px; margin-top: 6px;">Catatan: Tidak pakai saos</p>
+                                <h5>Nasi Rames Ayam</h5>
+                                <p class="item-note-display" style="font-size: 12px; margin-top: 6px;">Catatan: Tidak pakai sayur.</p>
                             </div>
                         </div>
-                        <span class="item-price">Rp 15.000</span>
+                        <span class="item-price">Rp 12.000</span>
+                    </div>
+                     <div class="order-item-row" style="align-items: flex-start; margin-top: 16px;">
+                        <div class="item-name">
+                            <span class="item-qty">1x</span>
+                            <div>
+                                <h5>Es Teh Manis</h5>
+                                <p class="item-note-display" style="font-size: 12px; margin-top: 6px;">Catatan: Es sedikit.</p>
+                            </div>
+                        </div>
+                        <span class="item-price">Rp 3.000</span>
                     </div>
                 </div>
                 
                 <div class="order-summary-block">
                      <div class="summary-row">
-                        <span>Subtotal (1 item)</span>
+                        <span>Subtotal (2 item)</span>
                         <span>Rp 15.000</span>
                     </div>
                     <div class="summary-row">
                         <span>Biaya Layanan</span>
-                        <span>Rp 0</span>
+                        <span>Rp 1.000</span>
                     </div>
                     <div class="summary-total">
                         <span>Total Pembayaran</span>
-                        <span>Rp 15.000</span>
+                        <span>Rp 16.000</span>
                     </div>
                 </div>
-
+            </div>
+            
+            <div class="unified-order-card">
                 <div class="unified-footer">
                     <p style="font-weight: 600; color: var(--dark-text);">Metode Pembayaran</p>
                     <span style="font-size: 14px; font-weight: 700; color: var(--info);">E-Wallet</span>
@@ -97,7 +120,7 @@
         </div>
         
         <div class="sticky-button-container" style="display: flex; gap: 10px;">
-            <a href="#" class="button secondary">Bantuan</a>
+            <a href="pelanggan_beri_rating.html" class="button secondary">Beri Rating</a>
             <a href="pelanggan_detail_warung.html" class="button">Pesan Lagi</a>
         </div>
     </div>
