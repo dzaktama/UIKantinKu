@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan - KantinKu</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <style>
+        .content {
+            padding: 0;
+            background-color: #fff;
+            animation: slideInFromRight 0.4s ease-out forwards;
+        }
+        @keyframes slideInFromRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .chat-list-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            text-decoration: none;
+            color: var(--dark-text);
+            gap: 12px;
+        }
+        .chat-list-item:hover {
+            background-color: #f9f9f9;
+        }
+        .chat-list-item .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #eee;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .chat-list-item .info {
+            flex-grow: 1;
+            min-width: 0;
+        }
+        .chat-list-item .info .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .chat-list-item .info h4 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .chat-list-item .info .time {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--light-text);
+        }
+        .chat-list-item .info .message {
+            font-size: 14px;
+            color: var(--light-text);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chat-list-item .unread-badge {
+            background: var(--danger);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-screen">
+        <div class="header">
+            <a href="pelanggan_tab_profil.html" class="back-button">&lt;</a>
+            Pesan Bantuan
+        </div>
+        
+        <div class="content">
+            <a href="pelanggan_chat_room.html?id=1&nama=Kantin Bu Martin" class="chat-list-item">
+                <div class="avatar">🏪</div>
+                <div class="info">
+                    <div class="header">
+                        <h4>Kantin Bu Martin</h4>
+                        <span class="time">10:32</span>
+                    </div>
+                    <p class="message">Pesanan Anda (#12345ABC) sedang disiapkan ya.</p>
+                </div>
+                <div class="unread-badge">1</div>
+            </a>
+            
+            <a href="pelanggan_chat_room.html?id=2&nama=Kantin Dzaky" class="chat-list-item">
+                <div class="avatar">🍜</div>
+                <div class="info">
+                    <div class="header">
+                        <h4>Kantin Dzaky</h4>
+                        <span class="time">Kemarin</span>
+                    </div>
+                    <p class="message">Oke kak, ditunggu pesanannya kembali!</p>
+                </div>
+            </a>
+            
+            <a href="pelanggan_chat_room.html?id=0&nama=Admin KantinKu" class="chat-list-item">
+                <div class="avatar"><i class="fas fa-headset"></i></div>
+                <div class="info">
+                    <div class="header">
+                        <h4>Admin KantinKu</h4>
+                        <span class="time">05/11/25</span>
+                    </div>
+                    <p class="message">Selamat datang di KantinKu! Ada yang bisa...</p>
+                </div>
+            </a>
+
+        </div>
+        
+        <div class="navbar">
+            <a href="pelanggan_halaman_utama.html" class="nav-item">
+                <div class="icon"><i class="fas fa-home"></i></div>
+                <div>Home</div>
+            </a>
+            <a href="pelanggan_tab_pesanan.html" class="nav-item">
+                <div class="icon"><i class="fas fa-receipt"></i></div>
+                <div>Pesanan</div>
+            </a>
+            <a href="pelanggan_tab_profil.html" class="nav-item active">
+                <div class="icon"><i class="fas fa-user"></i></div>
+                <div>Profil</div>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
