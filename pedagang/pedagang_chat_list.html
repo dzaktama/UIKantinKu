@@ -3,83 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil - KantinKu</title>
+    <title>Kotak Masuk - KantinKu</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <style>
+        .content {
+            padding: 0;
+            background-color: #fff;
+            animation: slideInFromRight 0.4s ease-out forwards;
+        }
+        @keyframes slideInFromRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .chat-list-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            text-decoration: none;
+            color: var(--dark-text);
+            gap: 12px;
+        }
+        .chat-list-item:hover {
+            background-color: #f9f9f9;
+        }
+        .chat-list-item .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #eee;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--info);
+        }
+        .chat-list-item .info {
+            flex-grow: 1;
+            min-width: 0;
+        }
+        .chat-list-item .info .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .chat-list-item .info h4 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .chat-list-item .info .time {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--light-text);
+        }
+        .chat-list-item .info .message {
+            font-size: 14px;
+            color: var(--light-text);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        /* Pesan dari pelanggan ditandai tebal */
+        .chat-list-item.unread .info .message {
+            color: var(--dark-text);
+            font-weight: 700;
+        }
+        .chat-list-item .unread-badge {
+            background: var(--danger);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
 
     <div class="mobile-screen">
-        <div class="header" style="text-align: left;">
-            Profil Saya
+        <div class="header">
+            <a href="pedagang_tab_profil.html" class="back-button">&lt;</a>
+            Kotak Masuk
         </div>
         
-        <div class="content" style="background-color: #f0f2f5;">
-            
-            <div class="profile-header" style="margin: -20px -20px 20px -20px;">
+        <div class="content">
+            <a href="pedagang_chat_room.html?id=1&nama=Budi Santoso" class="chat-list-item unread">
                 <div class="avatar">👤</div>
-                <div class="user-info">
-                    <h3 class="user-name">Budi Santoso</h3>
-                    <p class="user-email">budi@kampus.ac.id</p>
+                <div class="info">
+                    <div class="header">
+                        <h4>Budi Santoso</h4>
+                        <span class="time">10:32</span>
+                    </div>
+                    <p class="message">Halo, iya. Mohon pastikan ya kak, pesanan Nasi...</p>
                 </div>
-                <a href="pelanggan_edit_profil.html" class="profile-edit-link"><i class="fas fa-pen"></i></a>
-            </div>
-
-            <div class="profile-feature-grid">
-                <a href="pelanggan_metode_pembayaran.html" class="feature-item">
-                    <i class="fas fa-wallet"></i>
-                    <span>Pembayaran</span>
-                </a>
-                <a href="pelanggan_voucher_saya.html" class="feature-item">
-                    <i class="fas fa-ticket-alt"></i>
-                    <span>Voucher Saya</span>
-                </a>
-                <a href="pelanggan_tab_pesanan.html#riwayat" class="feature-item">
-                    <i class="fas fa-receipt"></i>
-                    <span>Riwayat Pesanan</span>
-                </a>
-            </div>
+                <div class="unread-badge">1</div>
+            </a>
             
-            <div class="profile-list-group">
-                <!-- === MODIFIKASI: Tautan ke Chat List Ditambahkan === -->
-                <a href="pelanggan_chat_list.html" class="profile-list-item">
-                    <i class="fas fa-comment-dots icon"></i>
-                    <span>Pesan Bantuan / Chat</span>
-                    <i class="fas fa-chevron-right chevron"></i>
-                </a>
-                <!-- =============================================== -->
-
-                <a href="#" class="profile-list-item">
-                    <i class="fas fa-question-circle icon"></i>
-                    <span>Pusat Bantuan</span>
-                    <i class="fas fa-chevron-right chevron"></i>
-                </a>
-                <a href="#" class="profile-list-item">
-                    <i class="fas fa-info-circle icon"></i>
-                    <span>Tentang KantinKu</span>
-                    <i class="fas fa-chevron-right chevron"></i>
-                </a>
-            </div>
-            
-            <div class="logout-button-container" style="margin-top: 24px;">
-                <a href="../login.html" class="logout-button">
-                    <i class="fas fa-sign-out-alt"></i> &nbsp; Logout
-                </a>
-            </div>
+            <a href="pedagang_chat_room.html?id=2&nama=Citra Lestari" class="chat-list-item">
+                <div class="avatar">👤</div>
+                <div class="info">
+                    <div class="header">
+                        <h4>Citra Lestari</h4>
+                        <span class="time">Kemarin</span>
+                    </div>
+                    <p class="message">Terima kasih banyak kak!</p>
+                </div>
+            </a>
 
         </div>
         
+        <!-- Navbar pedagang (5 item) -->
         <div class="navbar">
-            <a href="pelanggan_halaman_utama.html" class="nav-item">
-                <div class="icon"><i class="fas fa-home"></i></div>
-                <div>Home</div>
+            <a href="pedagang_halaman_utama.html" class="nav-item">
+                <div class="icon"><i class="fas fa-chart-pie"></i></div>
+                <div>Dashboard</div>
             </a>
-            <a href="pelanggan_tab_pesanan.html" class="nav-item">
+            <a href="pedagang_tab_pesanan.html" class="nav-item">
                 <div class="icon"><i class="fas fa-receipt"></i></div>
                 <div>Pesanan</div>
             </a>
-            <a href="pelanggan_tab_profil.html" class="nav-item active">
-                <div class="icon"><i class="fas fa-user"></i></div>
+            <a href="pedagang_tab_kelola_menu.html" class="nav-item">
+                <div class="icon"><i class="fas fa-book-open"></i></div>
+                <div>Menu</div>
+            </a>
+            <a href="pedagang_tab_laporan.html" class="nav-item">
+                <div class="icon"><i class="fas fa-chart-line"></i></div>
+                <div>Laporan</div>
+            </a>
+            <a href="pedagang_tab_profil.html" class="nav-item active">
+                <div class="icon"><i class="fas fa-user-circle"></i></div>
                 <div>Profil</div>
             </a>
         </div>
