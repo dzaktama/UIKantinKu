@@ -106,6 +106,106 @@
             font-size: 18px;
             cursor: pointer;
         }
+        
+        /* === CSS BARU: KARTU PESANAN & MODAL === */
+
+        /* 1. Kartu Pesanan di Chat */
+        .chat-bubble-order {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .chat-bubble-order:hover {
+            background-color: #fcfcfc;
+        }
+        .order-bubble-header {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .order-bubble-header i {
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+        .order-bubble-header h4 {
+            font-size: 15px;
+            font-weight: 700;
+            margin: 0;
+        }
+        .order-bubble-header span {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--light-text);
+        }
+        .order-bubble-body {
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .order-bubble-body p {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+        .order-bubble-body p:last-child { margin-bottom: 0; }
+        
+        .order-bubble-footer {
+            padding-top: 10px;
+        }
+        .order-bubble-footer span {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* 2. CSS Modal (Umum) */
+        .modal-overlay {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+            left: 50%; transform: translateX(-50%);
+            max-width: 375px; 
+        }
+        .modal-content {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            background: #f0f2f5; /* Latar abu-abu */
+            border-radius: 20px 20px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+        .modal-header {
+            padding: 16px 20px;
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+        .modal-header h3 {
+            font-size: 16px; font-weight: 700;
+            text-align: center; margin: 0;
+        }
+        .modal-close-button {
+            position: absolute; top: 12px; left: 16px;
+            font-size: 24px; color: #888; cursor: pointer; text-decoration: none;
+        }
+        .modal-body { 
+            padding: 0px 20px 20px 20px; /* Beri padding bawah */
+            background: #fff; /* Latar putih untuk card */
+        }
+        /* ========================================= */
     </style>
 </head>
 <body>
@@ -119,6 +219,25 @@
         <div class="content" id="chat-content-body">
             <div class="chat-body" id="chat-body-container">
                 
+                <!-- === KARTU PESANAN BARU === -->
+                <div class="chat-bubble-order" onclick="openOrderDetailModal()">
+                    <div class="order-bubble-header">
+                        <i class="fas fa-receipt"></i>
+                        <div>
+                            <h4>Detail Pesanan</h4>
+                            <span>#12345ABC</span>
+                        </div>
+                    </div>
+                    <div class="order-bubble-body">
+                        <p>1x Nasi Rames Ayam</p>
+                        <p>1x Es Teh Manis</p>
+                    </div>
+                    <div class="order-bubble-footer">
+                        <span>Lihat Detail</span>
+                    </div>
+                </div>
+                <!-- ========================= -->
+
                 <div class="chat-bubble chat-bubble-other">
                     Halo, iya. Mohon pastikan ya kak, pesanan Nasi Rames saya tidak pakai sayur.
                 </div>
@@ -139,6 +258,72 @@
             </button>
         </div>
     </div>
+
+    <!-- === MODAL DETAIL PESANAN BARU === -->
+    <div class="modal-overlay" id="orderDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detail Pesanan</h3>
+                <a href="javascript:void(0)" class="modal-close-button" onclick="closeOrderDetailModal()">&times;</a>
+            </div>
+            <div class="modal-body">
+                <!-- Konten modal meminjam style dari unified-order-card -->
+                <div class="unified-order-card" style="margin:0; box-shadow:none; border:none;">
+                    <div class="unified-header" style="padding-left:0; padding-right:0;">
+                        <div class="info">
+                            <h4>Budi Santoso</h4>
+                            <p style="font-weight: 600; color: var(--primary-color);">Status: BARU</p>
+                        </div>
+                        <span style="font-size: 14px; font-weight: 600; color: var(--light-text);">#12345ABC</span>
+                    </div>
+
+                    <div class="order-item-list" style="background: #fdfdfd; padding-left:0; padding-right:0;">
+                        <div class="summary-row" style="margin-bottom: 12px;">
+                            <span style="font-weight: 600; color: var(--light-text);"><i class="fas fa-calendar-alt"></i> Waktu Masuk</span>
+                            <span>07 Nov 2025, 11:00</span>
+                        </div>
+                    </div>
+
+                    <div class="order-card-notes" style="margin: 0; border-radius: 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+                        <i class="fas fa-sticky-note"></i> Catatan: "Nasi Rames tidak pakai sayur, Es Teh es sedikit."
+                    </div>
+
+                    <div class="order-item-list" style="padding-left:0; padding-right:0;">
+                        <div class="order-item-row">
+                            <div class="item-name">
+                                <span class="item-qty">1x</span>
+                                <h5>Nasi Rames Ayam</h5>
+                            </div>
+                            <span class="item-price">Rp 12.000</span>
+                        </div>
+                        <div class="order-item-row">
+                            <div class="item-name">
+                                <span class="item-qty">1x</span>
+                                <h5>Es Teh Manis</h5>
+                            </div>
+                            <span class="item-price">Rp 3.000</span>
+                        </div>
+                    </div>
+                    
+                    <div class="order-summary-block" style="padding-left:0; padding-right:0;">
+                         <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>Rp 15.000</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Biaya Layanan</span>
+                            <span>Rp 1.000</span>
+                        </div>
+                        <div class="summary-total">
+                            <span>Total Diterima</span>
+                            <span>Rp 16.000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ================================ -->
 
     <script>
         // ambil nama dari URL
@@ -183,10 +368,6 @@
             
             // 3. auto-scroll
             scrollToBottom();
-            
-            // 4. (opsional) simulasi balasan dari pelanggan
-            //    Biasanya pedagang yg mengakhiri obrolan, jadi ini bisa dimatikan
-            //    setTimeout(simulateReply, 1500);
         }
         
         // tambahkan listener untuk tombol 'Enter'
@@ -196,6 +377,22 @@
                 sendMessage();
             }
         });
+        
+        /* === JAVASCRIPT BARU: FUNGSI MODAL === */
+        const orderModal = document.getElementById('orderDetailModal');
+
+        // fungsi untuk membuka modal
+        function openOrderDetailModal() {
+            orderModal.style.display = 'block';
+            setTimeout(() => orderModal.classList.add('show'), 10);
+        }
+
+        // fungsi untuk menutup modal
+        function closeOrderDetailModal() {
+            orderModal.classList.remove('show');
+            setTimeout(() => orderModal.style.display = 'none', 300);
+        }
+        /* ==================================== */
     </script>
 </body>
 </html>
