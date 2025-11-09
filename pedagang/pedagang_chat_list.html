@@ -17,6 +17,45 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
+        /* === 1. CSS BARU: Search Bar === */
+        .chat-search-container {
+            position: relative;
+            padding: 16px 20px;
+            border-bottom: 10px solid var(--bg-light); /* Pemisah tebal */
+        }
+        .chat-search-container i {
+            position: absolute;
+            left: 35px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-text);
+        }
+        .chat-search-container input {
+            width: 100%;
+            padding: 12px 16px 12px 40px; /* Ruang untuk ikon */
+            border-radius: 10px;
+            border: 1.5px solid var(--border-color);
+            background: var(--bg-light);
+            font-size: 15px;
+            font-family: 'Montserrat', sans-serif;
+            box-sizing: border-box;
+        }
+        .chat-search-container input:focus {
+            border-color: var(--primary-color);
+            background: #fff;
+            outline: none;
+        }
+        
+        /* === 2. CSS BARU: Judul Kategori === */
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            padding: 0 20px;
+        }
+
+        /* === 3. CSS MODIFIKASI: Chat List Item === */
         .chat-list-item {
             display: flex;
             align-items: center;
@@ -29,6 +68,8 @@
         .chat-list-item:hover {
             background-color: #f9f9f9;
         }
+        
+        /* Avatar Bervariasi */
         .chat-list-item .avatar {
             width: 50px;
             height: 50px;
@@ -40,8 +81,16 @@
             align-items: center;
             font-size: 20px;
             font-weight: 700;
-            color: var(--info);
         }
+        .chat-list-item .avatar.user {
+            color: var(--primary-color);
+            background-color: #e4f5e9;
+        }
+        .chat-list-item .avatar.system {
+            background-color: var(--info);
+            color: white;
+        }
+
         .chat-list-item .info {
             flex-grow: 1;
             min-width: 0;
@@ -61,19 +110,21 @@
             font-weight: 500;
             color: var(--light-text);
         }
+        
+        /* Teks Preview Bervariasi */
         .chat-list-item .info .message {
             font-size: 14px;
-            color: var(--light-text);
+            color: var(--light-text); /* Pesan dibaca: abu-abu */
             font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        /* Pesan dari pelanggan ditandai tebal */
         .chat-list-item.unread .info .message {
-            color: var(--dark-text);
+            color: var(--dark-text); /* Pesan belum dibaca: hitam & tebal */
             font-weight: 700;
         }
+
         .chat-list-item .unread-badge {
             background: var(--danger);
             color: white;
@@ -88,6 +139,23 @@
             flex-shrink: 0;
             margin-left: 10px;
         }
+        
+        /* Status jika tidak ada hasil */
+        #no-results {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--light-text);
+        }
+        #no-results i {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        #no-results p {
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -99,28 +167,59 @@
         </div>
         
         <div class="content">
-            <a href="pedagang_chat_room.html?id=1&nama=Budi Santoso" class="chat-list-item unread">
-                <div class="avatar">👤</div>
+            
+            <!-- === Search Bar BARU === -->
+            <div class="chat-search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="chat-search" onkeyup="filterChat()" placeholder="Cari nama pelanggan...">
+            </div>
+
+            <!-- === Kategori Pesan Penting BARU === -->
+            <h3 class="section-title">Pesan Penting</h3>
+            <a href="pedagang_chat_room.html?id=0&nama=Admin KantinKu" class="chat-list-item">
+                <div class="avatar system"><i class="fas fa-headset"></i></div>
                 <div class="info">
                     <div class="header">
-                        <h4>Budi Santoso</h4>
-                        <span class="time">10:32</span>
+                        <h4>Admin KantinKu</h4>
+                        <span class="time">06/11/25</span>
                     </div>
-                    <p class="message">Halo, iya. Mohon pastikan ya kak, pesanan Nasi...</p>
+                    <p class="message">Update: Biaya layanan akan disesuaikan...</p>
                 </div>
-                <div class="unread-badge">1</div>
             </a>
             
-            <a href="pedagang_chat_room.html?id=2&nama=Citra Lestari" class="chat-list-item">
-                <div class="avatar">👤</div>
-                <div class="info">
-                    <div class="header">
-                        <h4>Citra Lestari</h4>
-                        <span class="time">Kemarin</span>
+            <!-- === Kategori Semua Obrolan BARU === -->
+            <h3 class="section-title">Semua Obrolan</h3>
+
+            <div id="chat-list-container"> <!-- Dibungkus untuk JS filtering -->
+                <a href="pedagang_chat_room.html?id=1&nama=Budi Santoso" class="chat-list-item unread">
+                    <div class="avatar user">👤</div>
+                    <div class="info">
+                        <div class="header">
+                            <h4>Budi Santoso</h4>
+                            <span class="time">10:32</span>
+                        </div>
+                        <p class="message">Halo, iya. Mohon pastikan ya kak, pesanan Nasi...</p>
                     </div>
-                    <p class="message">Terima kasih banyak kak!</p>
-                </div>
-            </a>
+                    <div class="unread-badge">1</div>
+                </a>
+                
+                <a href="pedagang_chat_room.html?id=2&nama=Citra Lestari" class="chat-list-item">
+                    <div class="avatar user">👤</div>
+                    <div class="info">
+                        <div class="header">
+                            <h4>Citra Lestari</h4>
+                            <span class="time">Kemarin</span>
+                        </div>
+                        <p class="message">Terima kasih banyak kak!</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- === Pesan "Tidak Ditemukan" BARU === -->
+            <div id="no-results">
+                <i class="fas fa-comment-slash"></i>
+                <p>Tidak ada obrolan ditemukan.</p>
+            </div>
 
         </div>
         
@@ -149,5 +248,34 @@
         </div>
     </div>
 
+    <script>
+        // === JAVASCRIPT BARU UNTUK FILTER ===
+        function filterChat() {
+            let input = document.getElementById('chat-search');
+            let filter = input.value.toLowerCase();
+            let container = document.getElementById('chat-list-container');
+            let items = container.getElementsByClassName('chat-list-item');
+            let noResults = document.getElementById('no-results');
+            let found = false;
+
+            for (let i = 0; i < items.length; i++) {
+                let h4 = items[i].getElementsByTagName('h4')[0];
+                let p = items[i].getElementsByTagName('p')[0];
+                
+                // Menggabungkan nama dan isi pesan untuk pencarian
+                let txtValue = (h4.textContent || h4.innerText) + " " + (p.textContent || p.innerText);
+                
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "flex"; // Tampilkan jika cocok
+                    found = true;
+                } else {
+                    items[i].style.display = "none"; // Sembunyikan jika tidak cocok
+                }
+            }
+            
+            // Tampilkan pesan "Tidak ada hasil" jika tidak ada yang ditemukan
+            noResults.style.display = found ? "none" : "block";
+        }
+    </script>
 </body>
 </html>

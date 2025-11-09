@@ -107,62 +107,54 @@
             cursor: pointer;
         }
         
-        /* === CSS BARU: KARTU PESANAN & MODAL === */
-
-        /* 1. Kartu Pesanan di Chat */
-        .chat-bubble-order {
+        /* === CSS MODIFIKASI: Header Konteks Pesanan === */
+        .chat-order-header {
             background: #fff;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .chat-bubble-order:hover {
-            background-color: #fcfcfc;
-        }
-        .order-bubble-header {
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
             display: flex;
-            gap: 10px;
             align-items: center;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed var(--border-color);
+            gap: 12px;
+            cursor: pointer;
+            flex-shrink: 0; /* Penting agar tidak ter-scroll */
+            animation: fadeIn 0.5s ease-out; /* Animasi masuk */
         }
-        .order-bubble-header i {
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .chat-order-header:hover {
+            background-color: #f9f9f9;
+        }
+        .chat-order-header i.icon-receipt {
             font-size: 20px;
-            color: var(--primary-color);
+            color: var(--info); /* Pedagang pakai warna biru */
         }
-        .order-bubble-header h4 {
-            font-size: 15px;
+        .chat-order-header .info {
+            flex-grow: 1;
+            min-width: 0; /* Mencegah teks mendorong chevron */
+        }
+        .chat-order-header .info h5 {
+            font-size: 14px;
             font-weight: 700;
-            margin: 0;
+            margin: 0 0 2px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .order-bubble-header span {
-            font-size: 12px;
+        .chat-order-header .info span {
+            font-size: 13px;
             font-weight: 600;
             color: var(--light-text);
         }
-        .order-bubble-body {
-            padding: 10px 0;
-            border-bottom: 1px dashed var(--border-color);
-        }
-        .order-bubble-body p {
+        .chat-order-header .chevron {
             font-size: 14px;
-            font-weight: 600;
-            margin: 0 0 4px 0;
+            color: #ccc;
+            flex-shrink: 0;
         }
-        .order-bubble-body p:last-child { margin-bottom: 0; }
+        /* ========================================= */
         
-        .order-bubble-footer {
-            padding-top: 10px;
-        }
-        .order-bubble-footer span {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        /* 2. CSS Modal (Umum) */
+        /* 2. CSS Modal (Tetap ada, tidak berubah) */
         .modal-overlay {
             display: none; 
             position: fixed;
@@ -205,7 +197,6 @@
             padding: 0px 20px 20px 20px; /* Beri padding bawah */
             background: #fff; /* Latar putih untuk card */
         }
-        /* ========================================= */
     </style>
 </head>
 <body>
@@ -216,27 +207,21 @@
             <span id="chat-partner-name">Budi Santoso</span>
         </div>
         
+        <!-- === KARTU PESANAN HEADER BARU === -->
+        <div class="chat-order-header" onclick="openOrderDetailModal()">
+            <i class="fas fa-receipt icon-receipt"></i>
+            <div class="info">
+                <h5>1x Nasi Rames Ayam, 1x Es Teh Manis</h5>
+                <span>Pesanan #12345ABC</span>
+            </div>
+            <i class="fas fa-chevron-right chevron"></i>
+        </div>
+        <!-- ================================ -->
+
         <div class="content" id="chat-content-body">
             <div class="chat-body" id="chat-body-container">
                 
-                <!-- === KARTU PESANAN BARU === -->
-                <div class="chat-bubble-order" onclick="openOrderDetailModal()">
-                    <div class="order-bubble-header">
-                        <i class="fas fa-receipt"></i>
-                        <div>
-                            <h4>Detail Pesanan</h4>
-                            <span>#12345ABC</span>
-                        </div>
-                    </div>
-                    <div class="order-bubble-body">
-                        <p>1x Nasi Rames Ayam</p>
-                        <p>1x Es Teh Manis</p>
-                    </div>
-                    <div class="order-bubble-footer">
-                        <span>Lihat Detail</span>
-                    </div>
-                </div>
-                <!-- ========================= -->
+                <!-- Bubble card pesanan yang lama sudah DIHAPUS dari sini -->
 
                 <div class="chat-bubble chat-bubble-other">
                     Halo, iya. Mohon pastikan ya kak, pesanan Nasi Rames saya tidak pakai sayur.
@@ -259,7 +244,7 @@
         </div>
     </div>
 
-    <!-- === MODAL DETAIL PESANAN BARU === -->
+    <!-- === MODAL DETAIL PESANAN (Tetap ada, tidak berubah) === -->
     <div class="modal-overlay" id="orderDetailModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -378,7 +363,7 @@
             }
         });
         
-        /* === JAVASCRIPT BARU: FUNGSI MODAL === */
+        /* === JAVASCRIPT MODAL (Tetap ada, tidak berubah) === */
         const orderModal = document.getElementById('orderDetailModal');
 
         // fungsi untuk membuka modal
